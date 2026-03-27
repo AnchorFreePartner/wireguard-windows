@@ -1,0 +1,7 @@
+- Run "winget install GoLang.Go"
+- Restart the cmd (for refresh PATH env)
+- Run "go install github.com/google/go-licenses@latest"
+- Go to cd path\to\your\project where go.mod is located
+- Run "go mod tidy"
+- Run "go list -m all > modules.txt"
+- Run "go-licenses report ./... > licenses.csv"
