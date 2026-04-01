@@ -1,13 +1,3 @@
-$go_command = Get-Command go -ErrorAction SilentlyContinue
-
-if (-not $go_command) {
-    Write-Error "Go is not installed or not in PATH. Install from https://go.dev/dl/ or use cmd command winget install GoLang.Go"
-    exit 1
-}
-
-$go_version = go version
-Write-Host "[+] Found Go: $go_version"
-
 $root_directory = (Get-Item $PSScriptRoot).Parent.FullName;
 Set-Location $root_directory/embeddable-dll-service
 cmd /c build.bat
