@@ -24,7 +24,7 @@ BEGIN
       VALUE "CompanyName", "WireGuard LLC"
       VALUE "FileDescription", "WireGuard Tunnel Library"
       VALUE "FileVersion", EXPAND(WIREGUARD_VERSION_STR)
-      VALUE "LegalCopyright", "Copyright © 2015-2026 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved."
+      VALUE "LegalCopyright", "Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved."
       VALUE "OriginalFilename", "tunnel.dll"
       VALUE "ProductName", "WireGuard Tunnel"
       VALUE "ProductVersion", EXPAND(WIREGUARD_VERSION_STR)
