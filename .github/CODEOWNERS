@@ -1,0 +1,4 @@
+.github/workflows/trivy.yml @AnchorFreePartner/secops
+.github/dependabot.yml @AnchorFreePartner/secops
+.github/workflows/checkov.yml @AnchorFreePartner/secops
+.github/workflows/secops-review.yml @AnchorFreePartner/secops
