@@ -10,8 +10,8 @@ cd /d %BUILDDIR% || exit /b 1
 
 if exist ..\.deps\prepared goto :getversion
 :installdeps
-	call .\installdependencies.bat
-
+	call .\installdependencies.bat || goto :error
+	
 :getversion
 	for /f "tokens=3" %%a in ('findstr /r "Number.*=.*[0-9.]*" ..\version\version.go') do set WIREGUARD_VERSION=%%a
 	set WIREGUARD_VERSION=%WIREGUARD_VERSION:"=%
