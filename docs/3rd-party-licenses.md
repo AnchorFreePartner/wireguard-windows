@@ -1,4 +1,4 @@
-# Wireguard windows 3rd Party Licenses
+# Wireguard tunnel library 3rd Party Licenses
 ## Component Licenses
 | Reference | Version | License Type | License |
 | :--- | :--- | :--- |  :--- |
