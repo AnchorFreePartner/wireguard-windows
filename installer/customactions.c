@@ -575,7 +575,11 @@ __declspec(dllexport) UINT __stdcall RemoveAdapters(MSIHANDLE installer)
 		buf[offset + size_read] = '\0';
 		nl = strchr(buf, '\n');
 		if (!nl) {
-			offset = size_read;
+			offset += size_read;
+			if (offset >= sizeof(buf) - 1) {
+				log_messagef(installer, LOG_LEVEL_INFO, TEXT("%1!hs!"), buf);
+				offset = 0;
+			}
 			continue;
 		}
 		nl[0] = '\0';
