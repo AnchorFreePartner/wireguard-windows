@@ -5,22 +5,25 @@
 
 package conf
 
-import "golang.org/x/sys/windows/registry"
+import (
+	"sync"
+
+	"golang.org/x/sys/windows/registry"
+)
 
 const adminRegKey = `Software\WireGuard`
 
-var adminKey registry.Key
+var (
+	adminKey     registry.Key
+	adminKeyOnce sync.Once
+	adminKeyErr  error
+)
 
 func openAdminKey() (registry.Key, error) {
-	if adminKey != 0 {
-		return adminKey, nil
-	}
-	var err error
-	adminKey, err = registry.OpenKey(registry.LOCAL_MACHINE, adminRegKey, registry.QUERY_VALUE|registry.WOW64_64KEY)
-	if err != nil {
-		return 0, err
-	}
-	return adminKey, nil
+	adminKeyOnce.Do(func() {
+		adminKey, adminKeyErr = registry.OpenKey(registry.LOCAL_MACHINE, adminRegKey, registry.QUERY_VALUE|registry.WOW64_64KEY)
+	})
+	return adminKey, adminKeyErr
 }
 
 func AdminBool(name string) bool {
