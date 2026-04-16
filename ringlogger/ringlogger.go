@@ -55,6 +55,7 @@ func NewRinglogger(filename, tag string) (*Ringlogger, error) {
 	}
 	err = file.Truncate(int64(unsafe.Sizeof(logMem{})))
 	if err != nil {
+		file.Close()
 		return nil, err
 	}
 	mapping, err := windows.CreateFileMapping(windows.Handle(file.Fd()), nil, windows.PAGE_READWRITE, 0, 0, nil)
