@@ -166,6 +166,12 @@ func (lt *labelTextLine) hide() {
 	lt.text.SetVisible(false)
 }
 
+func (lt *labelTextLine) hideWithText(text string) {
+	lt.text.SetText(text)
+	lt.label.SetVisible(false)
+	lt.text.SetVisible(false)
+}
+
 func (lt *labelTextLine) Dispose() {
 	lt.label.Dispose()
 	lt.text.Dispose()
@@ -371,7 +377,7 @@ func (iv *interfaceView) apply(c *conf.Interface) {
 	if IsAdmin {
 		iv.publicKey.show(c.PrivateKey.Public().String())
 	} else {
-		iv.publicKey.hide()
+		iv.publicKey.hideWithText(c.PrivateKey.Public().String())
 	}
 
 	if c.ListenPort > 0 {
@@ -445,7 +451,7 @@ func (pv *peerView) apply(c *conf.Peer) {
 	if IsAdmin {
 		pv.publicKey.show(c.PublicKey.String())
 	} else {
-		pv.publicKey.hide()
+		pv.publicKey.hideWithText(c.PublicKey.String())
 	}
 
 	if !c.PresharedKey.IsZero() && IsAdmin {
