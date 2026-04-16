@@ -27,14 +27,11 @@ func runScriptCommand(command, interfaceName string) error {
 		return nil
 	}
 	log.Printf("Executing: %#q", command)
-	comspec, _ := os.LookupEnv("COMSPEC")
-	if len(comspec) == 0 {
-		system32, err := windows.GetSystemDirectory()
-		if err != nil {
-			return err
-		}
-		comspec = filepath.Join(system32, "cmd.exe")
+	system32, err := windows.GetSystemDirectory()
+	if err != nil {
+		return err
 	}
+	comspec := filepath.Join(system32, "cmd.exe")
 
 	devNull, err := os.OpenFile(os.DevNull, os.O_RDWR, 0)
 	if err != nil {
