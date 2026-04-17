@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package ringlogger
@@ -40,10 +40,7 @@ func globalWrite(fd uintptr, p unsafe.Pointer, n int32) int32 {
 	b := (*[1 << 30]byte)(p)[:n]
 	for len(b) > 0 {
 		amountAvailable := len(globalBuffer) - globalBufferLocation
-		amountToCopy := len(b)
-		if amountToCopy > amountAvailable {
-			amountToCopy = amountAvailable
-		}
+		amountToCopy := min(len(b), amountAvailable)
 		copy(globalBuffer[globalBufferLocation:], b[:amountToCopy])
 		b = b[amountToCopy:]
 		globalBufferLocation += amountToCopy

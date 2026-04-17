@@ -1,12 +1,11 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package manager
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"runtime"
@@ -44,10 +43,6 @@ func trackedTunnelsGlobalState() (state TunnelState) {
 	}
 	return
 }
-
-var serviceTrackerCallbackPtr = windows.NewCallback(func(notifier *windows.SERVICE_NOTIFY) uintptr {
-	return 0
-})
 
 type serviceSubscriptionState struct {
 	service *mgr.Service
@@ -115,63 +110,19 @@ func trackService(service *mgr.Service, callback func(status uint32) bool) error
 	state := &serviceSubscriptionState{service: service, cb: callback}
 	state.done.Add(1)
 	err := windows.SubscribeServiceChangeNotifications(service.Handle, windows.SC_EVENT_STATUS_CHANGE, serviceSubscriptionCallbackPtr, uintptr(unsafe.Pointer(state)), &subscription)
-	if err == nil {
-		defer windows.UnsubscribeServiceChangeNotifications(subscription)
-		status, err := service.Query()
-		if err == nil {
-			if callback(svcStateToNotifyState(uint32(status.State))) {
-				return nil
-			}
-		}
-		state.done.Wait()
-		runtime.KeepAlive(state.cb)
-		return nil
-	}
-	if !errors.Is(err, windows.ERROR_PROC_NOT_FOUND) {
+	if err != nil {
 		return err
 	}
-
-	// TODO: Below this line is Windows 7 compatibility code, which hopefully we can delete at some point.
-
-	runtime.LockOSThread()
-	// This line would be fitting but is intentionally commented out:
-	//
-	//     defer runtime.UnlockOSThread()
-	//
-	// The reason is that NotifyServiceStatusChange used queued APC, which winds up messing
-	// with the thread local context, which in turn appears to corrupt Go's own usage of TLS,
-	// leading to crashes sometime later (usually in runtime_unlock()) when the thread is recycled.
-
-	const serviceNotifications = windows.SERVICE_NOTIFY_RUNNING | windows.SERVICE_NOTIFY_START_PENDING | windows.SERVICE_NOTIFY_STOP_PENDING | windows.SERVICE_NOTIFY_STOPPED | windows.SERVICE_NOTIFY_DELETE_PENDING
-	notifier := &windows.SERVICE_NOTIFY{
-		Version:        windows.SERVICE_NOTIFY_STATUS_CHANGE,
-		NotifyCallback: serviceTrackerCallbackPtr,
-	}
-	for {
-		err := windows.NotifyServiceStatusChange(service.Handle, serviceNotifications, notifier)
-		switch err {
-		case nil:
-			for {
-				if windows.SleepEx(uint32(time.Second*3/time.Millisecond), true) == windows.WAIT_IO_COMPLETION {
-					break
-				} else if callback(0) {
-					return nil
-				}
-			}
-		case windows.ERROR_SERVICE_MARKED_FOR_DELETE:
-			// Should be SERVICE_NOTIFY_DELETE_PENDING, but actually, we must release the handle and return here; otherwise it never deletes.
-			if callback(windows.SERVICE_NOTIFY_DELETED) {
-				return nil
-			}
-		case windows.ERROR_SERVICE_NOTIFY_CLIENT_LAGGING:
-			continue
-		default:
-			return err
-		}
-		if callback(svcStateToNotifyState(notifier.ServiceStatus.CurrentState)) {
+	defer runtime.KeepAlive(state)
+	defer windows.UnsubscribeServiceChangeNotifications(subscription)
+	status, err := service.Query()
+	if err == nil {
+		if callback(svcStateToNotifyState(uint32(status.State))) {
 			return nil
 		}
 	}
+	state.done.Wait()
+	return nil
 }
 
 func trackTunnelService(tunnelName string, service *mgr.Service) {
@@ -194,7 +145,7 @@ func trackTunnelService(tunnelName string, service *mgr.Service) {
 		trackedTunnelsLock.Unlock()
 	}()
 
-	for i := 0; i < 20; i++ {
+	for i := range 20 {
 		if i > 0 {
 			time.Sleep(time.Second / 5)
 		}
@@ -205,7 +156,7 @@ func trackTunnelService(tunnelName string, service *mgr.Service) {
 
 	checkForDisabled := func() (shouldReturn bool) {
 		config, err := service.Config()
-		if err == windows.ERROR_SERVICE_MARKED_FOR_DELETE || (err != nil && config.StartType == windows.SERVICE_DISABLED) {
+		if err == windows.ERROR_SERVICE_MARKED_FOR_DELETE || (err == nil && config.StartType == windows.SERVICE_DISABLED) {
 			log.Printf("[%s] Found disabled service via timeout, so deleting", tunnelName)
 			service.Delete()
 			trackedTunnelsLock.Lock()
@@ -305,39 +256,11 @@ func watchNewTunnelServices() error {
 	}
 	var subscription uintptr
 	err = windows.SubscribeServiceChangeNotifications(m.Handle, windows.SC_EVENT_DATABASE_CHANGE, servicesSubscriptionWatcherCallbackPtr, 0, &subscription)
-	if err == nil {
-		// We probably could do:
-		//     defer windows.UnsubscribeServiceChangeNotifications(subscription)
-		// and then terminate after some point, but instead we just let this go forever; it's process-lived.
-		return trackExistingTunnels()
-	}
-	if !errors.Is(err, windows.ERROR_PROC_NOT_FOUND) {
+	if err != nil {
 		return err
 	}
-
-	// TODO: Below this line is Windows 7 compatibility code, which hopefully we can delete at some point.
-	go func() {
-		runtime.LockOSThread()
-		notifier := &windows.SERVICE_NOTIFY{
-			Version:        windows.SERVICE_NOTIFY_STATUS_CHANGE,
-			NotifyCallback: serviceTrackerCallbackPtr,
-		}
-		for {
-			err := windows.NotifyServiceStatusChange(m.Handle, windows.SERVICE_NOTIFY_CREATED, notifier)
-			if err == nil {
-				windows.SleepEx(windows.INFINITE, true)
-				if notifier.ServiceNames != nil {
-					windows.LocalFree(windows.Handle(unsafe.Pointer(notifier.ServiceNames)))
-					notifier.ServiceNames = nil
-				}
-				trackExistingTunnels()
-			} else if err == windows.ERROR_SERVICE_NOTIFY_CLIENT_LAGGING {
-				continue
-			} else {
-				time.Sleep(time.Second * 3)
-				trackExistingTunnels()
-			}
-		}
-	}()
+	// We probably could do:
+	//     defer windows.UnsubscribeServiceChangeNotifications(subscription)
+	// and then terminate after some point, but instead we just let this go forever; it's process-lived.
 	return trackExistingTunnels()
 }

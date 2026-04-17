@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package manager
@@ -177,11 +177,17 @@ func (service *managerService) Execute(args []string, r <-chan svc.ChangeRequest
 			}
 			theirReader, ourWriter, err := os.Pipe()
 			if err != nil {
+				ourReader.Close()
+				theirWriter.Close()
 				log.Printf("Unable to create pipe: %v", err)
 				return
 			}
 			theirEvents, ourEvents, err := os.Pipe()
 			if err != nil {
+				ourReader.Close()
+				theirWriter.Close()
+				theirReader.Close()
+				ourWriter.Close()
 				log.Printf("Unable to create pipe: %v", err)
 				return
 			}
@@ -252,11 +258,9 @@ func (service *managerService) Execute(args []string, r <-chan svc.ChangeRequest
 	}
 	procsGroup := sync.WaitGroup{}
 	goStartProcess := func(session uint32) {
-		procsGroup.Add(1)
-		go func() {
+		procsGroup.Go(func() {
 			startProcess(session)
-			procsGroup.Done()
-		}()
+		})
 	}
 
 	go checkForUpdates()

@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  *
  * This is a direct translation of the original C, and for that reason, it's pretty unusual Go code:
  * https://git.zx2c4.com/wireguard-tools/tree/contrib/highlighter/highlighter.c
@@ -103,7 +103,7 @@ func (s stringSpan) isValidKey() bool {
 	if s.len != 44 || *s.at(43) != '=' {
 		return false
 	}
-	for i := 0; i < 42; i++ {
+	for i := range 42 {
 		if !isDecimal(*s.at(i)) && !isAlphabet(*s.at(i)) && *s.at(i) != '/' && *s.at(i) != '+' {
 			return false
 		}
@@ -278,7 +278,7 @@ func (s stringSpan) isValidScope() bool {
 		return false
 	}
 	for i := 0; i < s.len; i++ {
-		if isAlphabet(*s.at(i)) && !isDecimal(*s.at(i)) && *s.at(i) != '_' && *s.at(i) != '=' && *s.at(i) != '+' && *s.at(i) != '.' && *s.at(i) != '-' {
+		if !isAlphabet(*s.at(i)) && !isDecimal(*s.at(i)) && *s.at(i) != '_' && *s.at(i) != '=' && *s.at(i) != '+' && *s.at(i) != '.' && *s.at(i) != '-' {
 			return false
 		}
 	}

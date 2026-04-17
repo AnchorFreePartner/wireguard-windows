@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package main
@@ -12,6 +12,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -89,7 +90,16 @@ func checkForWow64() {
 		var processMachine, nativeMachine uint16
 		err := windows.IsWow64Process2(windows.CurrentProcess(), &processMachine, &nativeMachine)
 		if err == nil {
-			return processMachine != pe.IMAGE_FILE_MACHINE_UNKNOWN, nil
+			var IMAGE_FILE_MACHINE_THIS uint16
+			switch runtime.GOARCH {
+			case "amd64":
+				IMAGE_FILE_MACHINE_THIS = pe.IMAGE_FILE_MACHINE_AMD64
+			case "386":
+				IMAGE_FILE_MACHINE_THIS = pe.IMAGE_FILE_MACHINE_I386
+			case "arm64":
+				IMAGE_FILE_MACHINE_THIS = pe.IMAGE_FILE_MACHINE_ARM64
+			}
+			return processMachine != pe.IMAGE_FILE_MACHINE_UNKNOWN || nativeMachine != IMAGE_FILE_MACHINE_THIS, nil
 		}
 		if !errors.Is(err, windows.ERROR_PROC_NOT_FOUND) {
 			return false, err

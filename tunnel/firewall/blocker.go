@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package firewall
@@ -15,9 +15,7 @@ import (
 
 type wfpObjectInstaller func(uintptr) error
 
-//
 // Fundamental WireGuard specific WFP objects.
-//
 type baseObjects struct {
 	provider windows.GUID
 	filters  windows.GUID

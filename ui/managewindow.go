@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package ui
@@ -85,14 +85,6 @@ func NewManageTunnelsWindow() (*ManageTunnelsWindow, error) {
 			win.ShowWindow(mtw.Handle(), win.SW_MINIMIZE)
 		}
 	})
-	mtw.VisibleChanged().Attach(func() {
-		if mtw.Visible() {
-			mtw.tunnelsPage.updateConfView()
-			win.SetForegroundWindow(mtw.Handle())
-			win.BringWindowToTop(mtw.Handle())
-			mtw.logPage.scrollToBottom()
-		}
-	})
 
 	if mtw.tabs, err = walk.NewTabWidget(mtw); err != nil {
 		return nil, err
@@ -108,6 +100,15 @@ func NewManageTunnelsWindow() (*ManageTunnelsWindow, error) {
 		return nil, err
 	}
 	mtw.tabs.Pages().Add(mtw.logPage.TabPage)
+
+	mtw.VisibleChanged().Attach(func() {
+		if mtw.Visible() {
+			mtw.tunnelsPage.updateConfView()
+			win.SetForegroundWindow(mtw.Handle())
+			win.BringWindowToTop(mtw.Handle())
+			mtw.logPage.scrollToBottom()
+		}
+	})
 
 	mtw.tunnelChangedCB = manager.IPCClientRegisterTunnelChange(mtw.onTunnelChange)
 	globalState, _ := manager.IPCClientGlobalState()

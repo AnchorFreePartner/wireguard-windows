@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package ui
@@ -39,7 +39,7 @@ func NewLogPage() (*LogPage, error) {
 	disposables.Add(lp)
 
 	lp.Disposing().Attach(func() {
-		lp.model.quit <- true
+		close(lp.model.quit)
 	})
 
 	lp.SetTitle(l18n.Sprintf("Log"))
@@ -134,7 +134,7 @@ func (lp *LogPage) onCopy() {
 	if len(selectedItemIndexes) == 0 {
 		return
 	}
-	for i := 0; i < len(selectedItemIndexes); i++ {
+	for i := range selectedItemIndexes {
 		logItem := lp.model.items[selectedItemIndexes[i]]
 		logLines.WriteString(fmt.Sprintf("%s: %s\r\n", logItem.Stamp.Format("2006-01-02 15:04:05.000"), logItem.Line))
 	}
@@ -174,12 +174,12 @@ func (lp *LogPage) onSave() {
 type logModel struct {
 	walk.ReflectTableModelBase
 	lp    *LogPage
-	quit  chan bool
+	quit  chan struct{}
 	items []ringlogger.FollowLine
 }
 
 func newLogModel(lp *LogPage) *logModel {
-	mdl := &logModel{lp: lp, quit: make(chan bool)}
+	mdl := &logModel{lp: lp, quit: make(chan struct{})}
 	go func() {
 		ticker := time.NewTicker(time.Second)
 		cursor := ringlogger.CursorAll
@@ -208,7 +208,7 @@ func newLogModel(lp *LogPage) *logModel {
 
 			case <-mdl.quit:
 				ticker.Stop()
-				break
+				return
 			}
 		}
 	}()

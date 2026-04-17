@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package winhttp
@@ -45,16 +45,6 @@ func convertError(err *error) {
 	}
 }
 
-func isWin7() bool {
-	maj, min, _ := windows.RtlGetNtVersionNumbers()
-	return maj < 6 || (maj == 6 && min <= 1)
-}
-
-func isWin8DotZeroOrBelow() bool {
-	maj, min, _ := windows.RtlGetNtVersionNumbers()
-	return maj < 6 || (maj == 6 && min <= 2)
-}
-
 func NewSession(userAgent string) (session *Session, err error) {
 	session = new(Session)
 	defer convertError(&err)
@@ -68,23 +58,14 @@ func NewSession(userAgent string) (session *Session, err error) {
 	if err != nil {
 		return
 	}
-	var proxyFlag uint32 = _WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY
-	if isWin7() {
-		proxyFlag = _WINHTTP_ACCESS_TYPE_DEFAULT_PROXY
-	}
-	session.handle, err = winHttpOpen(userAgent16, proxyFlag, nil, nil, 0)
+	session.handle, err = winHttpOpen(userAgent16, _WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, nil, nil, 0)
 	if err != nil {
 		return
 	}
-	var enableHttp2 uint32 = _WINHTTP_PROTOCOL_FLAG_HTTP2
-	_ = winHttpSetOption(session.handle, _WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL, unsafe.Pointer(&enableHttp2), uint32(unsafe.Sizeof(enableHttp2))) // Don't check return value, in case of old Windows
-
-	if isWin8DotZeroOrBelow() {
-		var enableTLS12 uint32 = _WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2
-		err = winHttpSetOption(session.handle, _WINHTTP_OPTION_SECURE_PROTOCOLS, unsafe.Pointer(&enableTLS12), uint32(unsafe.Sizeof(enableTLS12)))
-		if err != nil {
-			return
-		}
+	var enableHttp uint32 = _WINHTTP_PROTOCOL_FLAG_HTTP2 | _WINHTTP_PROTOCOL_FLAG_HTTP3
+	if winHttpSetOption(session.handle, _WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL, unsafe.Pointer(&enableHttp), uint32(unsafe.Sizeof(enableHttp))) != nil {
+		enableHttp = _WINHTTP_PROTOCOL_FLAG_HTTP2
+		_ = winHttpSetOption(session.handle, _WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL, unsafe.Pointer(&enableHttp), uint32(unsafe.Sizeof(enableHttp)))
 	}
 
 	runtime.SetFinalizer(session, func(session *Session) {
@@ -187,7 +168,7 @@ func (response *Response) Length() (length uint64, err error) {
 	if err != nil {
 		return
 	}
-	length, err = strconv.ParseUint(windows.UTF16ToString(numBuf[:numLen]), 10, 64)
+	length, err = strconv.ParseUint(windows.UTF16ToString(numBuf[:numLen/2]), 10, 64)
 	if err != nil {
 		return
 	}
@@ -202,7 +183,7 @@ func (response *Response) Read(p []byte) (n int, err error) {
 	var bytesRead uint32
 	err = winHttpReadData(response.handle, &p[0], uint32(len(p)), &bytesRead)
 	if err != nil {
-		return 0, nil
+		return
 	}
 	if bytesRead == 0 || int(bytesRead) < 0 {
 		return 0, io.EOF

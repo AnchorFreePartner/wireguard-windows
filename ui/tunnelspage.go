@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package ui
@@ -350,7 +350,7 @@ func (tp *TunnelsPage) importFiles(paths []string) {
 
 		existingTunnelList, err := manager.IPCClientTunnels()
 		if err != nil {
-			syncedMsgBox(l18n.Sprintf("Error"), l18n.Sprintf("Could not enumerate existing tunnels: %v", lastErr), walk.MsgBoxIconWarning)
+			syncedMsgBox(l18n.Sprintf("Error"), l18n.Sprintf("Could not enumerate existing tunnels: %v", err), walk.MsgBoxIconWarning)
 			return
 		}
 		existingLowerTunnels := make(map[string]bool, len(existingTunnelList))
@@ -432,7 +432,11 @@ func (tp *TunnelsPage) onTunnelsViewItemActivated() {
 		if err != nil || (globalState != manager.TunnelStarted && globalState != manager.TunnelStopped) {
 			return
 		}
-		oldState, err := tp.listView.CurrentTunnel().Toggle()
+		tunnel := tp.listView.CurrentTunnel()
+		if tunnel == nil {
+			return
+		}
+		oldState, err := tunnel.Toggle()
 		if err != nil {
 			tp.Synchronize(func() {
 				if oldState == manager.TunnelUnknown {

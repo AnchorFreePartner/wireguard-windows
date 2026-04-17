@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
- * Copyright (C) 2020-2021 Jason A. Donenfeld. All Rights Reserved.
+ * Copyright (C) 2020-2026 Jason A. Donenfeld. All Rights Reserved.
  */
 
 #include "systeminfo.h"
@@ -57,18 +57,4 @@ const char *useragent(void)
 	RtlGetNtVersionNumbers(&maj, &min, &build);
 	_snprintf_s(useragent, sizeof(useragent), _TRUNCATE, "WireGuard-Fetcher/" VERSION_STR " (Windows %lu.%lu.%lu; %s)", maj, min, build & 0xffff, architecture());
 	return useragent;
-}
-
-bool is_win7(void)
-{
-	DWORD maj, min, build;
-	RtlGetNtVersionNumbers(&maj, &min, &build);
-	return maj == 6 && min == 1;
-}
-
-bool is_win8dotzero_or_below(void)
-{
-	DWORD maj, min, build;
-	RtlGetNtVersionNumbers(&maj, &min, &build);
-	return maj == 6 && min <= 2;
 }

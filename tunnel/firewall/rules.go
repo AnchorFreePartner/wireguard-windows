@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package firewall
@@ -15,9 +15,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-//
 // Known addresses.
-//
 var (
 	linkLocal = wtFwpV6AddrAndMask{[16]uint8{0xfe, 0x80}, 10}
 
@@ -122,6 +120,7 @@ func permitTunInterface(session uintptr, baseObjects *baseObjects, weight uint8,
 		}
 	}
 
+	runtime.KeepAlive(ifLUID)
 	return nil
 }
 
@@ -155,12 +154,13 @@ func permitWireGuardService(session uintptr, baseObjects *baseObjects, weight ui
 		return wrapErr(err)
 	}
 
+	sdBlob := wtFwpByteBlob{sd.Length(), (*byte)(unsafe.Pointer(sd))}
 	conditions[1] = wtFwpmFilterCondition0{
 		fieldKey:  cFWPM_CONDITION_ALE_USER_ID,
 		matchType: cFWP_MATCH_EQUAL,
 		conditionValue: wtFwpConditionValue0{
 			_type: cFWP_SECURITY_DESCRIPTOR_TYPE,
-			value: uintptr(unsafe.Pointer(&wtFwpByteBlob{sd.Length(), (*byte)(unsafe.Pointer(sd))})),
+			value: uintptr(unsafe.Pointer(&sdBlob)),
 		},
 	}
 
@@ -253,6 +253,8 @@ func permitWireGuardService(session uintptr, baseObjects *baseObjects, weight ui
 		}
 	}
 
+	runtime.KeepAlive(sdBlob)
+	runtime.KeepAlive(sd)
 	return nil
 }
 
@@ -822,18 +824,6 @@ func permitNdp(session uintptr, baseObjects *baseObjects, weight uint8) error {
 }
 
 func permitHyperV(session uintptr, baseObjects *baseObjects, weight uint8) error {
-	//
-	// Only applicable on Win8+.
-	//
-	{
-		major, minor, _ := windows.RtlGetNtVersionNumbers()
-		win8plus := major > 6 || (major == 6 && minor >= 3)
-
-		if !win8plus {
-			return nil
-		}
-	}
-
 	condition := wtFwpmFilterCondition0{
 		fieldKey:  cFWPM_CONDITION_L2_FLAGS,
 		matchType: cFWP_MATCH_EQUAL,

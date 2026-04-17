@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package winhttp
@@ -265,6 +265,7 @@ const (
 	_WINHTTP_FLAG_SECURE_PROTOCOL_ALL    = _WINHTTP_FLAG_SECURE_PROTOCOL_SSL2 | _WINHTTP_FLAG_SECURE_PROTOCOL_SSL3 | _WINHTTP_FLAG_SECURE_PROTOCOL_TLS1
 
 	_WINHTTP_PROTOCOL_FLAG_HTTP2 = 0x1
+	_WINHTTP_PROTOCOL_FLAG_HTTP3 = 0x2
 
 	_WINHTTP_ERROR_BASE                                  = 12000
 	_ERROR_WINHTTP_OUT_OF_HANDLES                        = Error(12000 + 1)

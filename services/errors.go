@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package services
 
 import (
+	"errors"
 	"fmt"
 
 	"golang.org/x/sys/windows"
@@ -75,13 +76,14 @@ func (e Error) Error() string {
 }
 
 func DetermineErrorCode(err error, serviceError Error) (bool, uint32) {
-	if syserr, ok := err.(windows.Errno); ok {
+	var syserr windows.Errno
+	if errors.As(err, &syserr) {
 		return false, uint32(syserr)
-	} else if serviceError != ErrorSuccess {
-		return true, uint32(serviceError)
-	} else {
-		return false, windows.NO_ERROR
 	}
+	if serviceError != ErrorSuccess {
+		return true, uint32(serviceError)
+	}
+	return false, windows.NO_ERROR
 }
 
 func CombineErrors(err error, serviceError Error) error {

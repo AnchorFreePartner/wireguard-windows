@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /*
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 #include <windows.h>
@@ -13,6 +13,22 @@
 #include <shlobj.h>
 #include <stdbool.h>
 #include <tchar.h>
+
+/*
+ * This here is a bit of a hack. We're compiling with subsystem=10.0 in the PE
+ * header, and so the Windows loader expects to see either
+ * _load_config.SecurityCookie set to the initial magic value, or for
+ * IMAGE_GUARD_SECURITY_COOKIE_UNUSED to be set. libssp doesn't use
+ * SecurityCookie anyway; SecurityCookie is for MSVC's /GS protection. So it
+ * seems like the proper thing to do is signal to the OS that it doesn't need
+ * to initialize SecurityCookie.
+ */
+
+#define IMAGE_GUARD_SECURITY_COOKIE_UNUSED 0x00000800
+const IMAGE_LOAD_CONFIG_DIRECTORY _load_config_used = {
+	.Size = sizeof(_load_config_used),
+	.GuardFlags = IMAGE_GUARD_SECURITY_COOKIE_UNUSED
+};
 
 #define MANAGER_SERVICE_NAME TEXT("WireGuardManager")
 #define TUNNEL_SERVICE_PREFIX TEXT("WireGuardTunnel$")
@@ -82,6 +98,23 @@ static void log_errorf(MSIHANDLE installer, enum log_level level, DWORD error_co
 	LocalFree(system_message);
 }
 
+extern NTAPI __declspec(dllimport) void RtlGetNtVersionNumbers(DWORD *MajorVersion, DWORD *MinorVersion, DWORD *BuildNumber);
+
+__declspec(dllexport) UINT __stdcall CheckWinVer(MSIHANDLE installer)
+{
+	bool is_com_initialized;
+	DWORD maj;
+
+	RtlGetNtVersionNumbers(&maj, NULL, NULL);
+	if (maj >= 10)
+		return ERROR_SUCCESS;
+	is_com_initialized = SUCCEEDED(CoInitialize(NULL));
+	log_messagef(installer, LOG_LEVEL_MSIERR, TEXT("WireGuard requires Windows ≥10."));
+	if (is_com_initialized)
+		CoUninitialize();
+	return ERROR_INSTALL_FAILURE;
+}
+
 __declspec(dllexport) UINT __stdcall CheckWow64(MSIHANDLE installer)
 {
 	UINT ret = ERROR_SUCCESS;
@@ -103,7 +136,16 @@ __declspec(dllexport) UINT __stdcall CheckWow64(MSIHANDLE installer)
 			log_errorf(installer, LOG_LEVEL_ERR, ret, TEXT("Failed to determine Wow64 status from IsWow64Process2"));
 			goto out;
 		}
-		if (process_machine == IMAGE_FILE_MACHINE_UNKNOWN)
+		#if defined(_AMD64_)
+		#define IMAGE_FILE_MACHINE_THIS IMAGE_FILE_MACHINE_AMD64
+		#elif defined(_X86_)
+		#define IMAGE_FILE_MACHINE_THIS IMAGE_FILE_MACHINE_I386
+		#elif defined(_ARM64_)
+		#define IMAGE_FILE_MACHINE_THIS IMAGE_FILE_MACHINE_ARM64
+		#else
+		#error "Unsupported MSI architecture"
+		#endif
+		if (process_machine == IMAGE_FILE_MACHINE_UNKNOWN && native_machine == IMAGE_FILE_MACHINE_THIS)
 			goto out;
 	} else {
 		if (!IsWow64Process(GetCurrentProcess(), &is_wow64_process)) {
@@ -215,7 +257,7 @@ __declspec(dllexport) UINT __stdcall EvaluateWireGuardServices(MSIHANDLE install
 			ret = GetLastError();
 			if (ret != ERROR_MORE_DATA) {
 				log_errorf(installer, LOG_LEVEL_ERR, ret, TEXT("EnumServicesStatusEx failed"));
-				break;
+				goto out;
 			}
 		}
 
@@ -246,6 +288,7 @@ out:
 __declspec(dllexport) UINT __stdcall LaunchApplicationAndAbort(MSIHANDLE installer)
 {
 	UINT ret = ERROR_INSTALL_FAILURE;
+	bool is_com_initialized = SUCCEEDED(CoInitialize(NULL));
 	TCHAR path[MAX_PATH];
 	DWORD path_len = _countof(path);
 	PROCESS_INFORMATION pi;
@@ -266,6 +309,8 @@ __declspec(dllexport) UINT __stdcall LaunchApplicationAndAbort(MSIHANDLE install
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
 out:
+	if (is_com_initialized)
+		CoUninitialize();
 	return ERROR_INSTALL_USEREXIT;
 }
 
@@ -441,7 +486,13 @@ static bool remove_directory_recursive(MSIHANDLE installer, TCHAR path[MAX_PATH]
 		}
 
 		if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			remove_directory_recursive(installer, path, max_depth - 1);
+			if (find_data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
+				if (RemoveDirectory(path))
+					log_messagef(installer, LOG_LEVEL_INFO, TEXT("Deleted reparse point \"%1\""), path);
+				else
+					log_errorf(installer, LOG_LEVEL_WARN, GetLastError(), TEXT("RemoveDirectory(\"%1\") reparse point failed"), path);
+			} else
+				remove_directory_recursive(installer, path, max_depth - 1);
 			continue;
 		}
 
@@ -530,7 +581,11 @@ __declspec(dllexport) UINT __stdcall RemoveAdapters(MSIHANDLE installer)
 		buf[offset + size_read] = '\0';
 		nl = strchr(buf, '\n');
 		if (!nl) {
-			offset = size_read;
+			offset += size_read;
+			if (offset >= sizeof(buf) - 1) {
+				log_messagef(installer, LOG_LEVEL_INFO, TEXT("%1!hs!"), buf);
+				offset = 0;
+			}
 			continue;
 		}
 		nl[0] = '\0';

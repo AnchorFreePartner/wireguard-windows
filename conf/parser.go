@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package conf
@@ -133,7 +133,7 @@ func parseKeyBase64(s string) (*Key, error) {
 
 func splitList(s string) ([]string, error) {
 	var out []string
-	for _, split := range strings.Split(s, ",") {
+	for split := range strings.SplitSeq(s, ",") {
 		trim := strings.TrimSpace(split)
 		if len(trim) == 0 {
 			return nil, &ParseError{l18n.Sprintf("Two commas in a row"), s}
@@ -167,10 +167,7 @@ func FromWgQuick(s, name string) (*Config, error) {
 	sawPrivateKey := false
 	var peer *Peer
 	for _, line := range lines {
-		pound := strings.IndexByte(line, '#')
-		if pound >= 0 {
-			line = line[:pound]
-		}
+		line, _, _ = strings.Cut(line, "#")
 		line = strings.TrimSpace(line)
 		lineLower := strings.ToLower(line)
 		if len(line) == 0 {

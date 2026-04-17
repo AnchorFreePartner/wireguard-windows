@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package tunnel
@@ -15,7 +15,7 @@ func findDefaultLUID(family winipcfg.AddressFamily, ourLUID winipcfg.LUID, lastL
 	if err != nil {
 		return err
 	}
-	lowestMetric := ^uint32(0)
+	lowestMetric := ^uint64(0)
 	index := uint32(0)
 	luid := winipcfg.LUID(0)
 	for i := range r {
@@ -32,8 +32,9 @@ func findDefaultLUID(family winipcfg.AddressFamily, ourLUID winipcfg.LUID, lastL
 			continue
 		}
 
-		if r[i].Metric+iface.Metric < lowestMetric {
-			lowestMetric = r[i].Metric + iface.Metric
+		combinedMetric := uint64(r[i].Metric) + uint64(iface.Metric)
+		if combinedMetric < lowestMetric {
+			lowestMetric = combinedMetric
 			index = r[i].InterfaceIndex
 			luid = r[i].InterfaceLUID
 		}
@@ -47,7 +48,7 @@ func findDefaultLUID(family winipcfg.AddressFamily, ourLUID winipcfg.LUID, lastL
 }
 
 func monitorMTU(family winipcfg.AddressFamily, ourLUID winipcfg.LUID) ([]winipcfg.ChangeCallback, error) {
-	var minMTU uint32
+	var minMTU int
 	if family == windows.AF_INET {
 		minMTU = 576
 	} else if family == windows.AF_INET6 {
@@ -76,10 +77,7 @@ func monitorMTU(family winipcfg.AddressFamily, ourLUID winipcfg.LUID) ([]winipcf
 			if err != nil {
 				return err
 			}
-			iface.NLMTU = mtu - 80
-			if iface.NLMTU < minMTU {
-				iface.NLMTU = minMTU
-			}
+			iface.NLMTU = uint32(max(int(mtu)-80, minMTU))
 			err = iface.Set()
 			if err != nil {
 				return err

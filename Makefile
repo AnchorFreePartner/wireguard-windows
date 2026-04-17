@@ -1,4 +1,4 @@
-GOFLAGS := -tags load_wgnt_from_rsrc -ldflags="-H windowsgui -s -w" -trimpath -buildinfo=false -buildvcs=false -v
+GOFLAGS := -tags load_wgnt_from_rsrc -ldflags="-H windowsgui -s -w" -trimpath -buildvcs=false -v
 export GOOS := windows
 export PATH := $(CURDIR)/.deps/go/bin:$(PATH)
 
@@ -13,6 +13,7 @@ SOURCE_FILES := $(call rwildcard,,*.go) .deps/go/prepared go.mod go.sum
 RESOURCE_FILES := resources.rc version/version.go manifest.xml $(patsubst %.svg,%.ico,$(wildcard ui/icon/*.svg)) .deps/wireguard-nt/prepared
 
 DEPLOYMENT_HOST ?= winvm
+DEPLOYMENT_ARCH ?= amd64
 DEPLOYMENT_PATH ?= Desktop
 
 all: amd64/wireguard.exe x86/wireguard.exe arm64/wireguard.exe
@@ -25,8 +26,8 @@ define download =
 	if ! mv $$@.unverified $$@; then rm -f $$@.unverified; exit 1; fi
 endef
 
-$(eval $(call download,go.tar.gz,https://go.dev/dl/go1.18beta1.linux-amd64.tar.gz,128f72c5c22640085e4187cd1b540c587cf8fb280f941519bd2d1ae9fdab4f37))
-$(eval $(call download,wireguard-nt.zip,https://download.wireguard.com/wireguard-nt/wireguard-nt-0.10.1.zip,772c0b1463d8d2212716f43f06f4594d880dea4f735165bd68e388fc41b81605))
+$(eval $(call download,go.tar.gz,https://download.wireguard.com/windows-toolchain/distfiles/go1.26.1-linux_amd64_2026-03-21.tar.gz,47eaffc1fe0a495051b0c894858c567c00fe17cdfda04cbd1b5b5fc8b516e0b1))
+$(eval $(call download,wireguard-nt.zip,https://download.wireguard.com/wireguard-nt/wireguard-nt-0.11.zip,55741efb41e4fa1fb1ce5b8a87f984898685a040d812c96f0ce6fa3175595087))
 
 .deps/go/prepared: .distfiles/go.tar.gz
 	mkdir -p .deps
@@ -70,8 +71,8 @@ remaster: export GOPROXY := direct
 remaster: .deps/go/prepared
 	rm -f go.sum go.mod
 	cp go.mod.master go.mod
-	go get -d
-	sed -i $(shell curl -L 'https://go.dev/dl/?mode=json&include=all' | jq -r '(".windows-amd64.zip",".linux-amd64.tar.gz") as $$suffix | .[-1].files[] | select(.filename|endswith($$suffix)) | ("-e", "s/go[0-9][^ ]*\\\($$suffix)\\([ ,]\\)[a-f0-9]\\+/\(.filename)\\1\(.sha256)/") | @sh') Makefile build.bat
+	go get
+	sed -i $(shell curl -L 'https://go.dev/dl/?mode=json&include=all' | jq -r '(".windows-amd64.zip",".linux-amd64.tar.gz") as $$suffix | .[0].files[] | select(.filename|endswith($$suffix)) | ("-e", "s/go[0-9][^ ]*\\\($$suffix)\\([ ,]\\)[a-f0-9]\\+/\(.filename)\\1\(.sha256)/") | @sh') Makefile build.bat
 
 fmt: export GOARCH := amd64
 fmt: .deps/go/prepared
@@ -87,7 +88,7 @@ crowdin:
 	find locales -name messages.gotext.json -exec bash -c '[[ $$(jq ".messages | length" {}) -ne 0 ]] || rm -rf "$$(dirname {})"' \;
 	@$(MAKE) --no-print-directory generate
 
-deploy: amd64/wireguard.exe
+deploy: $(DEPLOYMENT_ARCH)/wireguard.exe
 	-ssh $(DEPLOYMENT_HOST) -- 'taskkill /im wireguard.exe /f'
 	scp $< $(DEPLOYMENT_HOST):$(DEPLOYMENT_PATH)
 

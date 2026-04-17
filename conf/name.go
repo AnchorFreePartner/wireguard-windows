@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package conf
@@ -47,7 +47,7 @@ func isReserved(name string) bool {
 }
 
 func hasSpecialChars(name string) bool {
-	return strings.ContainsAny(name, specialChars) || strings.ContainsAny(name, netshellDllForbidden) || strings.ContainsAny(name, serviceNameForbidden)
+	return strings.ContainsAny(name, specialChars) || strings.ContainsAny(name, netshellDllForbidden) || strings.ContainsAny(name, serviceNameForbidden) || strings.HasPrefix(name, ".") || strings.HasSuffix(name, ".")
 }
 
 func TunnelNameIsValid(name string) bool {

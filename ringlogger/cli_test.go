@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package ringlogger
@@ -21,7 +21,7 @@ func TestThreads(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		for i := 0; i < 1024; i++ {
+		for i := range 1024 {
 			fmt.Fprintf(rl, "bla bla bla %d", i)
 		}
 		rl.Close()

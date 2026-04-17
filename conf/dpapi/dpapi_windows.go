@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package dpapi
@@ -48,6 +48,9 @@ func Decrypt(data []byte, name string) ([]byte, error) {
 	ret := make([]byte, out.Size)
 	copy(ret, unsafe.Slice(out.Data, out.Size))
 	windows.LocalFree(windows.Handle(unsafe.Pointer(out.Data)))
+	if outName == nil {
+		return nil, errors.New("decrypted data has no associated name")
+	}
 
 	// Note: this ridiculous open-coded strcmp is not constant time.
 	different := false

@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package updater
@@ -20,11 +20,7 @@ func versionNewerThanUs(candidate string) (bool, error) {
 	if len(candidateParts) == 0 || len(ourParts) == 0 {
 		return false, errors.New("Empty version")
 	}
-	l := len(candidateParts)
-	if len(ourParts) > l {
-		l = len(ourParts)
-	}
-	for i := 0; i < l; i++ {
+	for i := range max(len(ourParts), len(candidateParts)) {
 		var err error
 		cP, oP := uint64(0), uint64(0)
 		if i < len(candidateParts) {

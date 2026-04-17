@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 /*
@@ -64,7 +64,7 @@ func getTestInterface() (*IPAdapterAddresses, error) {
 
 	marker := strings.ToLower(testInterfaceMarker)
 	for _, ifc := range ifcs {
-		if strings.Index(strings.ToLower(ifc.FriendlyName()), marker) != -1 {
+		if strings.Contains(strings.ToLower(ifc.FriendlyName()), marker) {
 			return ifc, nil
 		}
 	}

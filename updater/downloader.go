@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2019-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2019-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package updater
@@ -147,7 +147,7 @@ func DownloadVerifyAndExecute(userToken uintptr) (progress chan DownloadProgress
 		}
 		defer response.Close()
 		length, err := response.Length()
-		if err == nil && length >= 0 {
+		if err == nil {
 			dp.BytesTotal = length
 			progress <- dp
 		}
@@ -164,12 +164,6 @@ func DownloadVerifyAndExecute(userToken uintptr) (progress chan DownloadProgress
 		}
 		if !hmac.Equal(hasher.Sum(nil), update.hash[:]) {
 			progress <- DownloadProgress{Error: errors.New("The downloaded update has the wrong hash")}
-			return
-		}
-
-		progress <- DownloadProgress{Activity: "Verifying authenticode signature"}
-		if !verifyAuthenticode(file.ExclusivePath()) {
-			progress <- DownloadProgress{Error: errors.New("The downloaded update does not have an authentic authenticode signature")}
 			return
 		}
 

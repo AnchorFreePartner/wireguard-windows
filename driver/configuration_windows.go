@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2017-2021 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2017-2026 WireGuard LLC. All Rights Reserved.
  */
 
 package driver
@@ -20,11 +20,17 @@ const (
 	AdapterStateUp   AdapterState = 1
 )
 
+type AllowedIpFlag uint32
+
+const (
+	AllowedIpRemove AllowedIpFlag = 1 << 0
+)
+
 type AllowedIP struct {
 	Address       [16]byte
 	AddressFamily winipcfg.AddressFamily
 	Cidr          uint8
-	_             [4]byte
+	Flags         AllowedIpFlag
 }
 
 type PeerFlag uint32
