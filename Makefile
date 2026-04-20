@@ -26,7 +26,7 @@ define download =
 	if ! mv $$@.unverified $$@; then rm -f $$@.unverified; exit 1; fi
 endef
 
-$(eval $(call download,go.tar.gz,https://download.wireguard.com/windows-toolchain/distfiles/go1.26.1-linux_amd64_2026-03-21.tar.gz,47eaffc1fe0a495051b0c894858c567c00fe17cdfda04cbd1b5b5fc8b516e0b1))
+$(eval $(call download,go.tar.gz,https://download.wireguard.com/windows-toolchain/distfiles/go1.26.2-linux_amd64_2026-04-20.tar.gz,57e21e3a07a07adcffc460ab2d4983ba3272b43d4b9f218eb4c9e98d88ef7f9f))
 $(eval $(call download,wireguard-nt.zip,https://download.wireguard.com/wireguard-nt/wireguard-nt-1.0.zip,d44f53300e47b44c53e77ee4c495cf061d06b5739f28872432ee1596107a302d))
 
 .deps/go/prepared: .distfiles/go.tar.gz
