@@ -564,7 +564,7 @@
         {
             "id": "All peers must have public keys",
             "message": "All peers must have public keys",
-            "translation": "Wszyscy uczestnicy muszą mieć klucze publiczne",
+            "translation": "Wszystkie peery muszą mieć klucze publiczne",
             "translatorComment": "Copied from source."
         },
         {
@@ -740,7 +740,7 @@
         {
             "id": "Preshared key:",
             "message": "Preshared key:",
-            "translation": "PSK:",
+            "translation": "Klucz wstępnie udostępniony:",
             "translatorComment": "Copied from source."
         },
         {
@@ -764,7 +764,7 @@
         {
             "id": "Latest handshake:",
             "message": "Latest handshake:",
-            "translation": "Ostatni uścisk dłoni (handshake):",
+            "translation": "Ostatnie uzgadnianie:",
             "translatorComment": "Copied from source."
         },
         {
@@ -906,13 +906,13 @@
         {
             "id": "&Block untunneled traffic (kill-switch)",
             "message": "&Block untunneled traffic (kill-switch)",
-            "translation": "Zablokuj niezabezpieczony ruch (wyłącznik awaryjny)",
+            "translation": "&Zablokuj niezabezpieczony ruch (wyłącznik awaryjny)",
             "translatorComment": "Copied from source."
         },
         {
             "id": "When a configuration has exactly one peer, and that peer has an allowed IPs containing at least one of 0.0.0.0/0 or ::/0, then the tunnel service engages a firewall ruleset to block all traffic that is neither to nor from the tunnel interface or is to the wrong DNS server, with special exceptions for DHCP and NDP.",
             "message": "When a configuration has exactly one peer, and that peer has an allowed IPs containing at least one of 0.0.0.0/0 or ::/0, then the tunnel service engages a firewall ruleset to block all traffic that is neither to nor from the tunnel interface or is to the wrong DNS server, with special exceptions for DHCP and NDP.",
-            "translation": "Jeżeli konfiguracja ma dokładnie jednego peer'a i ma w liście dozwolonych IP przynajmniej jeden adres 0.0.0.0/0 lub ::/0, wtedy usługa tunelowania dołącza do zapory sieciowej zestaw zasad, żeby zablokować ruch, który nie jest z interfejsu sieciowego lub jest skierowany do złego serwera DNS, z wyjątkiem dla serwera DHCP i NDP.",
+            "translation": "Jeżeli konfiguracja ma dokładnie jednego peera i ma w liście dozwolonych IP przynajmniej jeden adres 0.0.0.0/0 lub ::/0, wtedy usługa tunelowania dołącza do zapory sieciowej zestaw zasad, żeby zablokować ruch, który nie jest z interfejsu sieciowego lub jest skierowany do złego serwera DNS, z wyjątkiem dla serwera DHCP i NDP.",
             "translatorComment": "Copied from source."
         },
         {
@@ -1364,7 +1364,7 @@
         {
             "id": "Export all tunnels to &zip…",
             "message": "Export all tunnels to &zip…",
-            "translation": "Eksportuj wszystkie tunele do archiwum &zip…",
+            "translation": "Eksportuj wszystkie tunele do archiwum &ZIP…",
             "translatorComment": "Copied from source."
         },
         {
@@ -1501,7 +1501,7 @@
                             "msg": "Zaimportowano {M} z {N} tunelu"
                         },
                         "few": {
-                            "msg": "Zaimportowano {M} z {N} tunele"
+                            "msg": "Zaimportowano {M} z {N} tuneli"
                         },
                         "many": {
                             "msg": "Zaimportowano {M} z {N} tuneli"

@@ -1,0 +1,101 @@
+{
+    "language": "ar",
+    "messages": [
+        {
+            "id": "Error",
+            "message": "Error",
+            "translation": "خطأ",
+            "translatorComment": "Copied from source."
+        },
+        {
+            "id": "(no argument): elevate and install manager service",
+            "message": "(no argument): elevate and install manager service",
+            "translation": "(بدون معطيات): تصعيد الصلاحيات و تثبيت مدير الخدمة",
+            "translatorComment": "Copied from source."
+        },
+        {
+            "id": "Usage: {Args0} [\n{String}]",
+            "message": "Usage: {Args0} [\n{String}]",
+            "translation": "الاستخدام: {Args0} [\n{String}]",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Args0",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "os.Args[0]"
+                },
+                {
+                    "id": "String",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "builder.String()"
+                }
+            ]
+        },
+        {
+            "id": "Command Line Options",
+            "message": "Command Line Options",
+            "translation": "خيارات منفذ الأوامر",
+            "translatorComment": "Copied from source."
+        },
+        {
+            "id": "Unable to determine whether the process is running under WOW64: {Err}",
+            "message": "Unable to determine whether the process is running under WOW64: {Err}",
+            "translation": "غير قادر على تحديد ما إذا كانت العملية قيد التشغيل تحت WOW64: {Err}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
+                }
+            ]
+        },
+        {
+            "id": "You must use the native version of WireGuard on this computer.",
+            "message": "You must use the native version of WireGuard on this computer.",
+            "translation": "يجب عليك استخدام النسخة الأصلية من WireGuard على هذا الكمبيوتر.",
+            "translatorComment": "Copied from source."
+        },
+        {
+            "id": "Unable to open current process token: {Err}",
+            "message": "Unable to open current process token: {Err}",
+            "translation": "غير قادر على فتح رمز العملية الحالية: {Err}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
+                }
+            ]
+        },
+        {
+            "id": "WireGuard may only be used by users who are a member of the Builtin {AdminGroupName} group.",
+            "message": "WireGuard may only be used by users who are a member of the Builtin {AdminGroupName} group.",
+            "translation": "يمكن استخدام WireGuard فقط من قبل المستخدمين الذين هم أعضاء في مجموعة الـ {AdminGroupName} المدمجة.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "AdminGroupName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "elevate.AdminGroupName()"
+                }
+            ]
+        }
+    ]
+}

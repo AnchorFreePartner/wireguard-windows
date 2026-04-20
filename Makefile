@@ -82,9 +82,10 @@ generate: export GOOS :=
 generate: .deps/go/prepared
 	go generate -mod=mod ./...
 
+# Download https://crowdin.com/backend/download/project/wireguard.zip when logged in, and put the path to it into $CROWDIN_ZIP
 crowdin:
 	find locales -maxdepth 1 -mindepth 1 -type d \! -name en -exec rm -rf {} +
-	curl -Lo - https://crowdin.com/backend/download/project/wireguard.zip | bsdtar -C locales -x -f - --strip-components 2 wireguard-windows
+	bsdtar -C locales -x -f "$(CROWDIN_ZIP)" --strip-components 2 wireguard-windows
 	find locales -name messages.gotext.json -exec bash -c '[[ $$(jq ".messages | length" {}) -ne 0 ]] || rm -rf "$$(dirname {})"' \;
 	@$(MAKE) --no-print-directory generate
 
