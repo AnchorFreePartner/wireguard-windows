@@ -328,7 +328,6 @@ func main() {
 		if len(os.Args) != 2 {
 			usage()
 		}
-		_ = driver.UninstallLegacyWintun() // Best effort
 		err := driver.Uninstall()
 		if err != nil {
 			fatal(err)

@@ -75,6 +75,7 @@ type ConfView struct {
 	tunnelChangedCB *manager.TunnelChangeCallback
 	tunnel          *manager.Tunnel
 	updateTicker    *time.Ticker
+	quit            chan struct{}
 }
 
 func (lsl *labelStatusLine) widgets() (walk.Widget, walk.Widget) {
@@ -162,6 +163,12 @@ func (lt *labelTextLine) show(text string) {
 
 func (lt *labelTextLine) hide() {
 	lt.text.SetText("")
+	lt.label.SetVisible(false)
+	lt.text.SetVisible(false)
+}
+
+func (lt *labelTextLine) hideWithText(text string) {
+	lt.text.SetText(text)
 	lt.label.SetVisible(false)
 	lt.text.SetVisible(false)
 }
@@ -371,7 +378,7 @@ func (iv *interfaceView) apply(c *conf.Interface) {
 	if IsAdmin {
 		iv.publicKey.show(c.PrivateKey.Public().String())
 	} else {
-		iv.publicKey.hide()
+		iv.publicKey.hideWithText(c.PrivateKey.Public().String())
 	}
 
 	if c.ListenPort > 0 {
@@ -445,7 +452,7 @@ func (pv *peerView) apply(c *conf.Peer) {
 	if IsAdmin {
 		pv.publicKey.show(c.PublicKey.String())
 	} else {
-		pv.publicKey.hide()
+		pv.publicKey.hideWithText(c.PublicKey.String())
 	}
 
 	if !c.PresharedKey.IsZero() && IsAdmin {
@@ -548,24 +555,30 @@ func NewConfView(parent walk.Container) (*ConfView, error) {
 	}
 	cv.SetDoubleBuffering(true)
 	cv.updateTicker = time.NewTicker(time.Second)
+	cv.quit = make(chan struct{})
 	go func() {
-		for range cv.updateTicker.C {
-			if !cv.Visible() || !cv.Form().Visible() || win.IsIconic(cv.Form().Handle()) {
-				continue
-			}
-			if cv.tunnel != nil {
-				tunnel := cv.tunnel
-				var state manager.TunnelState
-				var config conf.Config
-				if state, _ = tunnel.State(); state == manager.TunnelStarted {
-					config, _ = tunnel.RuntimeConfig()
+		for {
+			select {
+			case <-cv.updateTicker.C:
+				if !cv.Visible() || !cv.Form().Visible() || win.IsIconic(cv.Form().Handle()) {
+					continue
 				}
-				if config.Name == "" {
-					config, _ = tunnel.StoredConfig()
+				if cv.tunnel != nil {
+					tunnel := cv.tunnel
+					var state manager.TunnelState
+					var config conf.Config
+					if state, _ = tunnel.State(); state == manager.TunnelStarted {
+						config, _ = tunnel.RuntimeConfig()
+					}
+					if config.Name == "" {
+						config, _ = tunnel.StoredConfig()
+					}
+					cv.Synchronize(func() {
+						cv.setTunnel(tunnel, &config, state)
+					})
 				}
-				cv.Synchronize(func() {
-					cv.setTunnel(tunnel, &config, state)
-				})
+			case <-cv.quit:
+				return
 			}
 		}
 	}()
@@ -582,6 +595,7 @@ func (cv *ConfView) Dispose() {
 	}
 	if cv.updateTicker != nil {
 		cv.updateTicker.Stop()
+		close(cv.quit)
 		cv.updateTicker = nil
 	}
 	cv.ScrollView.Dispose()

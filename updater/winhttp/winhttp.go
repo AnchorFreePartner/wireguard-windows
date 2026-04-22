@@ -62,10 +62,10 @@ func NewSession(userAgent string) (session *Session, err error) {
 	if err != nil {
 		return
 	}
-	var enableHttp2 uint32 = _WINHTTP_PROTOCOL_FLAG_HTTP2
-	err = winHttpSetOption(session.handle, _WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL, unsafe.Pointer(&enableHttp2), uint32(unsafe.Sizeof(enableHttp2)))
-	if err != nil {
-		return
+	var enableHttp uint32 = _WINHTTP_PROTOCOL_FLAG_HTTP2 | _WINHTTP_PROTOCOL_FLAG_HTTP3
+	if winHttpSetOption(session.handle, _WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL, unsafe.Pointer(&enableHttp), uint32(unsafe.Sizeof(enableHttp))) != nil {
+		enableHttp = _WINHTTP_PROTOCOL_FLAG_HTTP2
+		_ = winHttpSetOption(session.handle, _WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL, unsafe.Pointer(&enableHttp), uint32(unsafe.Sizeof(enableHttp)))
 	}
 
 	runtime.SetFinalizer(session, func(session *Session) {
@@ -168,7 +168,7 @@ func (response *Response) Length() (length uint64, err error) {
 	if err != nil {
 		return
 	}
-	length, err = strconv.ParseUint(windows.UTF16ToString(numBuf[:numLen]), 10, 64)
+	length, err = strconv.ParseUint(windows.UTF16ToString(numBuf[:numLen/2]), 10, 64)
 	if err != nil {
 		return
 	}
@@ -183,7 +183,7 @@ func (response *Response) Read(p []byte) (n int, err error) {
 	var bytesRead uint32
 	err = winHttpReadData(response.handle, &p[0], uint32(len(p)), &bytesRead)
 	if err != nil {
-		return 0, nil
+		return
 	}
 	if bytesRead == 0 || int(bytesRead) < 0 {
 		return 0, io.EOF

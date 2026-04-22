@@ -44,10 +44,6 @@ func trackedTunnelsGlobalState() (state TunnelState) {
 	return
 }
 
-var serviceTrackerCallbackPtr = windows.NewCallback(func(notifier *windows.SERVICE_NOTIFY) uintptr {
-	return 0
-})
-
 type serviceSubscriptionState struct {
 	service *mgr.Service
 	cb      func(status uint32) bool
@@ -117,6 +113,7 @@ func trackService(service *mgr.Service, callback func(status uint32) bool) error
 	if err != nil {
 		return err
 	}
+	defer runtime.KeepAlive(state)
 	defer windows.UnsubscribeServiceChangeNotifications(subscription)
 	status, err := service.Query()
 	if err == nil {
@@ -125,7 +122,6 @@ func trackService(service *mgr.Service, callback func(status uint32) bool) error
 		}
 	}
 	state.done.Wait()
-	runtime.KeepAlive(state.cb)
 	return nil
 }
 
@@ -160,7 +156,7 @@ func trackTunnelService(tunnelName string, service *mgr.Service) {
 
 	checkForDisabled := func() (shouldReturn bool) {
 		config, err := service.Config()
-		if err == windows.ERROR_SERVICE_MARKED_FOR_DELETE || (err != nil && config.StartType == windows.SERVICE_DISABLED) {
+		if err == windows.ERROR_SERVICE_MARKED_FOR_DELETE || (err == nil && config.StartType == windows.SERVICE_DISABLED) {
 			log.Printf("[%s] Found disabled service via timeout, so deleting", tunnelName)
 			service.Delete()
 			trackedTunnelsLock.Lock()

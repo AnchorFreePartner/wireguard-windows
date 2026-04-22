@@ -26,8 +26,8 @@ define download =
 	if ! mv $$@.unverified $$@; then rm -f $$@.unverified; exit 1; fi
 endef
 
-$(eval $(call download,go.tar.gz,https://download.wireguard.com/windows-toolchain/distfiles/go1.26.1-linux_amd64_2026-03-21.tar.gz,47eaffc1fe0a495051b0c894858c567c00fe17cdfda04cbd1b5b5fc8b516e0b1))
-$(eval $(call download,wireguard-nt.zip,https://download.wireguard.com/wireguard-nt/wireguard-nt-0.10.1.zip,772c0b1463d8d2212716f43f06f4594d880dea4f735165bd68e388fc41b81605))
+$(eval $(call download,go.tar.gz,https://download.wireguard.com/windows-toolchain/distfiles/go1.26.2-linux_amd64_2026-04-20.tar.gz,57e21e3a07a07adcffc460ab2d4983ba3272b43d4b9f218eb4c9e98d88ef7f9f))
+$(eval $(call download,wireguard-nt.zip,https://download.wireguard.com/wireguard-nt/wireguard-nt-1.0.zip,d44f53300e47b44c53e77ee4c495cf061d06b5739f28872432ee1596107a302d))
 
 .deps/go/prepared: .distfiles/go.tar.gz
 	mkdir -p .deps
@@ -82,9 +82,10 @@ generate: export GOOS :=
 generate: .deps/go/prepared
 	go generate -mod=mod ./...
 
+# Download https://crowdin.com/backend/download/project/wireguard.zip when logged in, and put the path to it into $CROWDIN_ZIP
 crowdin:
 	find locales -maxdepth 1 -mindepth 1 -type d \! -name en -exec rm -rf {} +
-	curl -Lo - https://crowdin.com/backend/download/project/wireguard.zip | bsdtar -C locales -x -f - --strip-components 2 wireguard-windows
+	bsdtar -C locales -x -f "$(CROWDIN_ZIP)" --strip-components 2 wireguard-windows
 	find locales -name messages.gotext.json -exec bash -c '[[ $$(jq ".messages | length" {}) -ne 0 ]] || rm -rf "$$(dirname {})"' \;
 	@$(MAKE) --no-print-directory generate
 

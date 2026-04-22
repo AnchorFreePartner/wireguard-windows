@@ -17,7 +17,6 @@ import (
 
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/svc"
-	"golang.zx2c4.com/wireguard/windows/driver"
 
 	"golang.zx2c4.com/wireguard/windows/conf"
 	"golang.zx2c4.com/wireguard/windows/elevate"
@@ -177,11 +176,17 @@ func (service *managerService) Execute(args []string, r <-chan svc.ChangeRequest
 			}
 			theirReader, ourWriter, err := os.Pipe()
 			if err != nil {
+				ourReader.Close()
+				theirWriter.Close()
 				log.Printf("Unable to create pipe: %v", err)
 				return
 			}
 			theirEvents, ourEvents, err := os.Pipe()
 			if err != nil {
+				ourReader.Close()
+				theirWriter.Close()
+				theirReader.Close()
+				ourWriter.Close()
 				log.Printf("Unable to create pipe: %v", err)
 				return
 			}
@@ -258,7 +263,6 @@ func (service *managerService) Execute(args []string, r <-chan svc.ChangeRequest
 	}
 
 	go checkForUpdates()
-	go driver.UninstallLegacyWintun() // We uninstall opportunistically here, so that we don't have to carry around the uninstaller code forever.
 
 	var sessionsPointer *windows.WTS_SESSION_INFO
 	var count uint32

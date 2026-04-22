@@ -257,7 +257,7 @@ __declspec(dllexport) UINT __stdcall EvaluateWireGuardServices(MSIHANDLE install
 			ret = GetLastError();
 			if (ret != ERROR_MORE_DATA) {
 				log_errorf(installer, LOG_LEVEL_ERR, ret, TEXT("EnumServicesStatusEx failed"));
-				break;
+				goto out;
 			}
 		}
 
@@ -288,6 +288,7 @@ out:
 __declspec(dllexport) UINT __stdcall LaunchApplicationAndAbort(MSIHANDLE installer)
 {
 	UINT ret = ERROR_INSTALL_FAILURE;
+	bool is_com_initialized = SUCCEEDED(CoInitialize(NULL));
 	TCHAR path[MAX_PATH];
 	DWORD path_len = _countof(path);
 	PROCESS_INFORMATION pi;
@@ -308,6 +309,8 @@ __declspec(dllexport) UINT __stdcall LaunchApplicationAndAbort(MSIHANDLE install
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
 out:
+	if (is_com_initialized)
+		CoUninitialize();
 	return ERROR_INSTALL_USEREXIT;
 }
 
@@ -363,34 +366,56 @@ out:
 	return ret == ERROR_SUCCESS ? ret : ERROR_INSTALL_FAILURE;
 }
 
+static bool can_be_deleted(const TCHAR *path)
+{
+	FILE_DISPOSITION_INFO di = { .DeleteFile = TRUE };
+	DWORD last_error;
+	HANDLE file;
+	bool ret;
+
+	file = CreateFile(path, DELETE, FILE_SHARE_DELETE, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, NULL);
+	if (file == INVALID_HANDLE_VALUE)
+		return GetLastError() == ERROR_FILE_NOT_FOUND || GetLastError() == ERROR_PATH_NOT_FOUND || GetLastError() == ERROR_INVALID_NAME;
+	ret = SetFileInformationByHandle(file, FileDispositionInfo, &di, sizeof(di));
+	last_error = GetLastError();
+	if (ret) {
+		di.DeleteFile = FALSE;
+		SetFileInformationByHandle(file, FileDispositionInfo, &di, sizeof(di));
+	}
+	CloseHandle(file);
+	SetLastError(last_error);
+	return ret;
+}
+
 struct file_id { DWORD volume, index_high, index_low; };
 
 static bool calculate_file_id(const TCHAR *path, struct file_id *id)
 {
 	BY_HANDLE_FILE_INFORMATION file_info = { 0 };
+	DWORD last_error;
 	HANDLE file;
 	bool ret;
 
-	file = CreateFile(path, 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	file = CreateFile(path, 0, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, NULL);
 	if (file == INVALID_HANDLE_VALUE)
 		return false;
 	ret = GetFileInformationByHandle(file, &file_info);
+	last_error = GetLastError();
 	CloseHandle(file);
-	if (!ret)
-		return false;
 	id->volume = file_info.dwVolumeSerialNumber;
 	id->index_high = file_info.nFileIndexHigh;
 	id->index_low = file_info.nFileIndexLow;
-	return true;
+	SetLastError(last_error);
+	return ret;
 }
 
 __declspec(dllexport) UINT __stdcall KillWireGuardProcesses(MSIHANDLE installer)
 {
 	HANDLE snapshot, process;
 	PROCESSENTRY32 entry = { .dwSize = sizeof(PROCESSENTRY32) };
-	TCHAR process_path[MAX_PATH], executable[MAX_PATH];
-	DWORD process_path_len = _countof(process_path);
-	struct file_id file_ids[3], file_id;
+	TCHAR process_path[MAX_PATH], executables[2][MAX_PATH];
+	DWORD process_path_len = _countof(process_path), tries = 0;
+	struct file_id file_ids[2], file_id;
 	size_t file_ids_len = 0;
 	bool is_com_initialized = SUCCEEDED(CoInitialize(NULL));
 	LSTATUS mret;
@@ -403,30 +428,43 @@ __declspec(dllexport) UINT __stdcall KillWireGuardProcesses(MSIHANDLE installer)
 	if (!process_path[0])
 		goto out;
 
-	log_messagef(installer, LOG_LEVEL_INFO, TEXT("Detecting running processes"));
+	if (!PathCombine(executables[0], process_path, TEXT("wg.exe")) ||
+	    !PathCombine(executables[1], process_path, TEXT("wireguard.exe")))
+		goto out;
+	if (can_be_deleted(executables[0]) && can_be_deleted(executables[1]))
+		goto out;
 
-	if (PathCombine(executable, process_path, TEXT("wg.exe")) && calculate_file_id(executable, &file_ids[file_ids_len]))
-		++file_ids_len;
-	if (PathCombine(executable, process_path, TEXT("wireguard.exe")) && calculate_file_id(executable, &file_ids[file_ids_len]))
-		++file_ids_len;
+	log_messagef(installer, LOG_LEVEL_INFO, TEXT("Detecting running processes"));
+	for (size_t i = 0; i < _countof(executables); ++i) {
+		if (calculate_file_id(executables[i], &file_ids[file_ids_len]))
+			++file_ids_len;
+		else
+			log_errorf(installer, LOG_LEVEL_WARN, GetLastError(), TEXT("Unable to calculate file ID \"%1\""), executables[i]);
+	}
 	if (!file_ids_len)
 		goto out;
 
+retry:
 	snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if (snapshot == INVALID_HANDLE_VALUE)
 		goto out;
-
 	for (bool ret = Process32First(snapshot, &entry); ret; ret = Process32Next(snapshot, &entry)) {
 		if (_tcsicmp(entry.szExeFile, TEXT("wireguard.exe")) && _tcsicmp(entry.szExeFile, TEXT("wg.exe")))
 			continue;
 		process = OpenProcess(PROCESS_TERMINATE | PROCESS_QUERY_LIMITED_INFORMATION, false, entry.th32ProcessID);
-		if (!process)
+		if (!process) {
+			log_errorf(installer, LOG_LEVEL_WARN, GetLastError(), TEXT("Unable to open process \"%1\" (pid %2!d!)"), entry.szExeFile, entry.th32ProcessID);
 			continue;
+		}
 		process_path_len = _countof(process_path);
-		if (!QueryFullProcessImageName(process, 0, process_path, &process_path_len))
+		if (!QueryFullProcessImageName(process, 0, process_path, &process_path_len)) {
+			log_errorf(installer, LOG_LEVEL_WARN, GetLastError(), TEXT("Unable to query process \"%1\" (pid %2!d!)"), entry.szExeFile, entry.th32ProcessID);
 			goto next;
-		if (!calculate_file_id(process_path, &file_id))
+		}
+		if (!calculate_file_id(process_path, &file_id)) {
+			log_errorf(installer, LOG_LEVEL_WARN, GetLastError(), TEXT("Unable to calculate file ID \"%1\" (pid %2!d!)"), process_path, entry.th32ProcessID);
 			goto next;
+		}
 		ret = false;
 		for (size_t i = 0; i < file_ids_len; ++i) {
 			if (!memcmp(&file_id, &file_ids[i], sizeof(file_id))) {
@@ -439,12 +477,22 @@ __declspec(dllexport) UINT __stdcall KillWireGuardProcesses(MSIHANDLE installer)
 		if (TerminateProcess(process, STATUS_DLL_INIT_FAILED_LOGOFF)) {
 			WaitForSingleObject(process, INFINITE);
 			log_messagef(installer, LOG_LEVEL_INFO, TEXT("Killed \"%1\" (pid %2!d!)"), process_path, entry.th32ProcessID);
-		}
+		} else
+			log_errorf(installer, LOG_LEVEL_WARN, GetLastError(), TEXT("Unable to kill \"%1\" (pid %2!d!)"), process_path, entry.th32ProcessID);
 	next:
 		CloseHandle(process);
 	}
 	CloseHandle(snapshot);
-
+	for (size_t i = 0; i < _countof(executables); ++i) {
+		if (!can_be_deleted(executables[i])) {
+			if (++tries > 100) {
+				log_errorf(installer, LOG_LEVEL_WARN, GetLastError(), TEXT("File \"%1\" cannot be deleted"), executables[i]);
+				continue;
+			}
+			Sleep(100);
+			goto retry;
+		}
+	}
 out:
 	if (is_com_initialized)
 		CoUninitialize();
@@ -483,7 +531,13 @@ static bool remove_directory_recursive(MSIHANDLE installer, TCHAR path[MAX_PATH]
 		}
 
 		if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			remove_directory_recursive(installer, path, max_depth - 1);
+			if (find_data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
+				if (RemoveDirectory(path))
+					log_messagef(installer, LOG_LEVEL_INFO, TEXT("Deleted reparse point \"%1\""), path);
+				else
+					log_errorf(installer, LOG_LEVEL_WARN, GetLastError(), TEXT("RemoveDirectory(\"%1\") reparse point failed"), path);
+			} else
+				remove_directory_recursive(installer, path, max_depth - 1);
 			continue;
 		}
 
@@ -572,7 +626,11 @@ __declspec(dllexport) UINT __stdcall RemoveAdapters(MSIHANDLE installer)
 		buf[offset + size_read] = '\0';
 		nl = strchr(buf, '\n');
 		if (!nl) {
-			offset = size_read;
+			offset += size_read;
+			if (offset >= sizeof(buf) - 1) {
+				log_messagef(installer, LOG_LEVEL_INFO, TEXT("%1!hs!"), buf);
+				offset = 0;
+			}
 			continue;
 		}
 		nl[0] = '\0';

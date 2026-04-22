@@ -1,22 +1,22 @@
 {
-    "language": "zh-TW",
+    "language": "da",
     "messages": [
         {
             "id": "Error",
             "message": "Error",
-            "translation": "錯誤",
+            "translation": "Fejl",
             "translatorComment": "Copied from source."
         },
         {
             "id": "(no argument): elevate and install manager service",
             "message": "(no argument): elevate and install manager service",
-            "translation": "(無參數)：提升權限並安裝管理服務",
+            "translation": "(intet argument): ophøj og installer manager-tjenesten",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Usage: {Args0} [\n{String}]",
             "message": "Usage: {Args0} [\n{String}]",
-            "translation": "使用方法： {Args0} [\n{String}]",
+            "translation": "Brug: {Args0} [{String}]",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -40,13 +40,13 @@
         {
             "id": "Command Line Options",
             "message": "Command Line Options",
-            "translation": "命令列選項",
+            "translation": "Kommandolinje indstillinger",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Unable to determine whether the process is running under WOW64: {Err}",
             "message": "Unable to determine whether the process is running under WOW64: {Err}",
-            "translation": "無法確定該處理程序是否在 WOW64 下執行： {Err}",
+            "translation": "Kan ikke afgøre om processen kører under WOW64: {Err}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -62,13 +62,13 @@
         {
             "id": "You must use the native version of WireGuard on this computer.",
             "message": "You must use the native version of WireGuard on this computer.",
-            "translation": "您必須在此電腦上執行原生版本的 WireGuard。",
+            "translation": "Du skal bruge den oprindelige version af WireGuard på denne computer.",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Unable to open current process token: {Err}",
             "message": "Unable to open current process token: {Err}",
-            "translation": "無法開啓目前處理程序的權杖： {Err}",
+            "translation": "Kan ikke åbne aktuelle procestoken: {Err}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -84,7 +84,7 @@
         {
             "id": "WireGuard may only be used by users who are a member of the Builtin {AdminGroupName} group.",
             "message": "WireGuard may only be used by users who are a member of the Builtin {AdminGroupName} group.",
-            "translation": "WireGuard 可能只能被內建的「{AdminGroupName}」群組成員使用。",
+            "translation": "WireGuard må kun bruges af brugere, der er medlem af den indbygget {AdminGroupName} gruppe.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -100,7 +100,7 @@
         {
             "id": "WireGuard is running, but the UI is only accessible from desktops of the Builtin {AdminGroupName} group.",
             "message": "WireGuard is running, but the UI is only accessible from desktops of the Builtin {AdminGroupName} group.",
-            "translation": "WireGuard 正在執行，但 UI 只能從內建的內建的「{AdminGroupName}」群組成員的桌面存取。",
+            "translation": "WireGuard kører, men brugergrænsefladen er kun tilgængelig fra skriveborde i den indbygget {AdminGroupName} gruppe.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -116,19 +116,19 @@
         {
             "id": "WireGuard system tray icon did not appear after 30 seconds.",
             "message": "WireGuard system tray icon did not appear after 30 seconds.",
-            "translation": "WireGuard 的工作列圖示在 30 秒後並沒有顯示。",
+            "translation": "WireGuard statusikonet blev ikke vist efter 30 sekunder.",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Now",
             "message": "Now",
-            "translation": "就是現在",
+            "translation": "Nu",
             "translatorComment": "Copied from source."
         },
         {
             "id": "System clock wound backward!",
             "message": "System clock wound backward!",
-            "translation": "系統時鐘倒退了！",
+            "translation": "Systemuret er sat bagud!",
             "translatorComment": "Copied from source."
         },
         {
@@ -139,8 +139,11 @@
                     "feature": "plural",
                     "arg": "Years",
                     "cases": {
+                        "one": {
+                            "msg": "{Years} år"
+                        },
                         "other": {
-                            "msg": "{Years} 年"
+                            "msg": "{Years} år"
                         }
                     }
                 }
@@ -164,8 +167,11 @@
                     "feature": "plural",
                     "arg": "Days",
                     "cases": {
+                        "one": {
+                            "msg": "{Days} dag"
+                        },
                         "other": {
-                            "msg": "{Days} 天"
+                            "msg": "{Days} dage"
                         }
                     }
                 }
@@ -189,8 +195,11 @@
                     "feature": "plural",
                     "arg": "Hours",
                     "cases": {
+                        "one": {
+                            "msg": "{Hours} time"
+                        },
                         "other": {
-                            "msg": "{Hours} 小時"
+                            "msg": "{Hours} timer"
                         }
                     }
                 }
@@ -214,8 +223,11 @@
                     "feature": "plural",
                     "arg": "Minutes",
                     "cases": {
+                        "one": {
+                            "msg": "{Minutes} minut"
+                        },
                         "other": {
-                            "msg": "{Minutes} 分鐘"
+                            "msg": "{Minutes} minutter"
                         }
                     }
                 }
@@ -239,8 +251,11 @@
                     "feature": "plural",
                     "arg": "Seconds",
                     "cases": {
+                        "one": {
+                            "msg": "{Seconds} sekund"
+                        },
                         "other": {
-                            "msg": "{Seconds} 秒"
+                            "msg": "{Seconds} sekunder"
                         }
                     }
                 }
@@ -259,7 +274,7 @@
         {
             "id": "{Timestamp} ago",
             "message": "{Timestamp} ago",
-            "translation": "{Timestamp} 前",
+            "translation": "{Timestamp} siden",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -355,7 +370,7 @@
         {
             "id": "{Why}: {Offender}",
             "message": "{Why}: {Offender}",
-            "translation": "{Why}： {Offender}",
+            "translation": "{Why}: {Offender}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -379,55 +394,55 @@
         {
             "id": "Invalid IP address",
             "message": "Invalid IP address",
-            "translation": "無效的 IP 位址",
+            "translation": "Ugyldig IP-adresse",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid network prefix length",
             "message": "Invalid network prefix length",
-            "translation": "無效的網路位址首碼長度",
+            "translation": "Ugyldig netværkspræfiks",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Missing port from endpoint",
             "message": "Missing port from endpoint",
-            "translation": "Endpoint 中沒有指定埠號",
+            "translation": "Endepunkt mangler angivelse af port",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid endpoint host",
             "message": "Invalid endpoint host",
-            "translation": "無效的 Endpoint 位址",
+            "translation": "Ugyldig endepunkt vært",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Brackets must contain an IPv6 address",
             "message": "Brackets must contain an IPv6 address",
-            "translation": "括號中必須包含一個 IPv6 位址",
+            "translation": "Parenteser skal indeholde en IPv6-adresse",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid MTU",
             "message": "Invalid MTU",
-            "translation": "無效的 MTU",
+            "translation": "Ugyldig MTU",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid port",
             "message": "Invalid port",
-            "translation": "無效的埠號",
+            "translation": "Ugyldig port",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid persistent keepalive",
             "message": "Invalid persistent keepalive",
-            "translation": "無效的 Persistent Keepalive 設定",
+            "translation": "Ugyldig persistente keepalive",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid key: {Err}",
             "message": "Invalid key: {Err}",
-            "translation": "無效的金鑰： {Err}",
+            "translation": "Ugyldig nøgle: {Err}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -443,13 +458,13 @@
         {
             "id": "Keys must decode to exactly 32 bytes",
             "message": "Keys must decode to exactly 32 bytes",
-            "translation": "金鑰必須剛好長 32 bytes",
+            "translation": "Nøgler skal afkode til præcis 32 bytes",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Number must be a number between 0 and 2^64-1: {Err}",
             "message": "Number must be a number between 0 and 2^64-1: {Err}",
-            "translation": "數值必須介於 0 到 2^64-1： {Err}",
+            "translation": "Nummeret skal være et tal mellem 0 og 2^64-1: {Err}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -465,115 +480,115 @@
         {
             "id": "Two commas in a row",
             "message": "Two commas in a row",
-            "translation": "一行中有兩個逗號",
+            "translation": "To kommaer i træk",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Tunnel name is not valid",
             "message": "Tunnel name is not valid",
-            "translation": "隧道名稱無效",
+            "translation": "Navn for tunnel er ikke gyldigt",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Line must occur in a section",
             "message": "Line must occur in a section",
-            "translation": "行必須出現在段落中",
+            "translation": "Linje skal forekomme i en sektion",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Config key is missing an equals separator",
             "message": "Config key is missing an equals separator",
-            "translation": "設定的項目必須要有一個等號",
+            "translation": "Konfigurationsnøgle mangler en identisk separator",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Key must have a value",
             "message": "Key must have a value",
-            "translation": "必須要有一個值",
+            "translation": "Nøglen skal have en værdi",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid key for [Interface] section",
             "message": "Invalid key for [Interface] section",
-            "translation": "[Interface] 中有無效選項",
+            "translation": "Ugyldig nøgle for [Interface] sektion",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid key for [Peer] section",
             "message": "Invalid key for [Peer] section",
-            "translation": "[Peer] 中有無效選項",
+            "translation": "Ugyldig nøgle for [Peer] sektion",
             "translatorComment": "Copied from source."
         },
         {
             "id": "An interface must have a private key",
             "message": "An interface must have a private key",
-            "translation": "Interface 中必須要有一把私鑰",
+            "translation": "Et interface skal have en privat nøgle",
             "translatorComment": "Copied from source."
         },
         {
             "id": "[none specified]",
             "message": "[none specified]",
-            "translation": "[未指定]",
+            "translation": "[ingen angivet]",
             "translatorComment": "Copied from source."
         },
         {
             "id": "All peers must have public keys",
             "message": "All peers must have public keys",
-            "translation": "每個 Peer 都必須要有公鑰",
+            "translation": "Alle modparter skal have offentlige nøgler",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Error in getting configuration",
             "message": "Error in getting configuration",
-            "translation": "讀取設定時發生錯誤",
+            "translation": "Fejl ved indlæsning af konfiguration",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid key for interface section",
             "message": "Invalid key for interface section",
-            "translation": "Interface 中的金鑰無效",
+            "translation": "Ugyldig nøgle for interface sektion",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Protocol version must be 1",
             "message": "Protocol version must be 1",
-            "translation": "協定版本必須為 1",
+            "translation": "Protokol version skal være 1",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid key for peer section",
             "message": "Invalid key for peer section",
-            "translation": "Peer 中的金鑰無效",
+            "translation": "Ugyldig nøgle for modpart sektion",
             "translatorComment": "Copied from source."
         },
         {
             "id": "[EnumerationSeparator]",
             "message": "[EnumerationSeparator]",
-            "translation": "、",
+            "translation": ", ",
             "comment": "Text to insert between items when listing - most western languages will translate ‘[EnumerationSeparator]’ into ‘, ’ to produce lists like ‘apple, orange, strawberry’. Eastern languages might translate into ‘、’ to produce lists like ‘リンゴ、オレンジ、イチゴ’."
         },
         {
             "id": "[UnitSeparator]",
             "message": "[UnitSeparator]",
-            "translation": " ",
+            "translation": ", ",
             "comment": "Text to insert when combining units of a measure - most languages will translate ‘[UnitSeparator]’ into ‘ ’ (space) to produce lists like ‘2 minuti 30 sekund’, or empty string ‘’ to produce ‘2分30秒’."
         },
         {
             "id": "About WireGuard",
             "message": "About WireGuard",
-            "translation": "關於 WireGuard",
+            "translation": "Om WireGuard",
             "translatorComment": "Copied from source."
         },
         {
             "id": "WireGuard logo image",
             "message": "WireGuard logo image",
-            "translation": "WireGuard logo 圖片",
+            "translation": "WireGuard logo billede",
             "translatorComment": "Copied from source."
         },
         {
             "id": "App version: {Number}\nGo backend version: {WireGuardGoVersion}\nGo version: {Version_go}-{GOARCH}\nOperating system: {OsName}\nArchitecture: {NativeArch}",
             "message": "App version: {Number}\nGo backend version: {WireGuardGoVersion}\nGo version: {Version_go}-{GOARCH}\nOperating system: {OsName}\nArchitecture: {NativeArch}",
-            "translation": "應用程式版本： {Number}\n後端程式（Go 實作）版本： {WireGuardGoVersion}\nGo 版本： {Version_go}-{GOARCH}\n作業系統： {OsName}\n架構： {NativeArch}",
+            "translation": "App version: {Number}\nGo backend version: {WireGuardGoVersion}\nGo version: {Version_go}-{GOARCH}\nOperativsystem: {OsName}\nArkitektur: {NativeArch}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -629,145 +644,145 @@
         {
             "id": "Close",
             "message": "Close",
-            "translation": "關閉",
+            "translation": "Luk",
             "translatorComment": "Copied from source."
         },
         {
             "id": "♥ &Donate!",
             "message": "♥ &Donate!",
-            "translation": "♥ 捐贈！ (&D)",
+            "translation": "♥ &Donér!",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Status:",
             "message": "Status:",
-            "translation": "狀態",
+            "translation": "Status:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Deactivate",
             "message": "&Deactivate",
-            "translation": "中斷連線 (&D)",
+            "translation": "&Deaktivér",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Activate",
             "message": "&Activate",
-            "translation": "連線 (&A)",
+            "translation": "&Aktivér",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Public key:",
             "message": "Public key:",
-            "translation": "公鑰",
+            "translation": "Offentlig nøgle:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Listen port:",
             "message": "Listen port:",
-            "translation": "監聽埠",
+            "translation": "Lytteport:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "MTU:",
             "message": "MTU:",
-            "translation": "MTU",
+            "translation": "MTU:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Addresses:",
             "message": "Addresses:",
-            "translation": "位址",
+            "translation": "Adresser:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "DNS servers:",
             "message": "DNS servers:",
-            "translation": "DNS 伺服器",
+            "translation": "DNS servere:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Scripts:",
             "message": "Scripts:",
-            "translation": "指令碼：",
+            "translation": "Scripts:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Preshared key:",
             "message": "Preshared key:",
-            "translation": "預交換金鑰",
+            "translation": "Forhåndsdelt nøgle:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Allowed IPs:",
             "message": "Allowed IPs:",
-            "translation": "允許的位址",
+            "translation": "Tilladte IP-adresser:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Endpoint:",
             "message": "Endpoint:",
-            "translation": "連接點",
+            "translation": "Slutpunkt:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Persistent keepalive:",
             "message": "Persistent keepalive:",
-            "translation": "Keepalive 間隔",
+            "translation": "Vedvarende keepalive:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Latest handshake:",
             "message": "Latest handshake:",
-            "translation": "最後交握時間",
+            "translation": "Seneste håndtryk:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Transfer:",
             "message": "Transfer:",
-            "translation": "流量",
+            "translation": "Overførsel:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "pre-up",
             "message": "pre-up",
-            "translation": "連接前",
+            "translation": "før opstart",
             "translatorComment": "Copied from source."
         },
         {
             "id": "post-up",
             "message": "post-up",
-            "translation": "連接後",
+            "translation": "efter opstart",
             "translatorComment": "Copied from source."
         },
         {
             "id": "pre-down",
             "message": "pre-down",
-            "translation": "斷線前",
+            "translation": "før nedlukning",
             "translatorComment": "Copied from source."
         },
         {
             "id": "post-down",
             "message": "post-down",
-            "translation": "斷線後",
+            "translation": "efter nedlukning",
             "translatorComment": "Copied from source."
         },
         {
             "id": "disabled, per policy",
             "message": "disabled, per policy",
-            "translation": "已關閉, 隨著策略",
+            "translation": "deaktiveret, per politik",
             "translatorComment": "Copied from source."
         },
         {
             "id": "enabled",
             "message": "enabled",
-            "translation": "已啓用",
+            "translation": "aktiveret",
             "translatorComment": "Copied from source."
         },
         {
             "id": "{String} received, {String_1} sent",
             "message": "{String} received, {String_1} sent",
-            "translation": "已收到 {String}；已傳送 {String_1}",
+            "translation": "{String} modtaget, {String_1} sendt",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -791,25 +806,25 @@
         {
             "id": "Failed to determine tunnel state",
             "message": "Failed to determine tunnel state",
-            "translation": "無法確認隧道狀態",
+            "translation": "Kunne ikke bestemme tunneltilstand",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Failed to activate tunnel",
             "message": "Failed to activate tunnel",
-            "translation": "無法連接隧道",
+            "translation": "Fejl ved aktivering af tunnel",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Failed to deactivate tunnel",
             "message": "Failed to deactivate tunnel",
-            "translation": "無法斷開隧道連線",
+            "translation": "Fejl ved deaktivering af tunnel",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Interface: {Name}",
             "message": "Interface: {Name}",
-            "translation": "[隧道] {Name}",
+            "translation": "Interface: {Name}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -825,85 +840,85 @@
         {
             "id": "Peer",
             "message": "Peer",
-            "translation": "節點",
+            "translation": "Modpart",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Create new tunnel",
             "message": "Create new tunnel",
-            "translation": "建立新隧道",
+            "translation": "Opret ny tunnel",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Edit tunnel",
             "message": "Edit tunnel",
-            "translation": "編輯隧道設定",
+            "translation": "Redigér tunnel",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Name:",
             "message": "&Name:",
-            "translation": "名稱 (&N)",
+            "translation": "&Navn:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Public key:",
             "message": "&Public key:",
-            "translation": "公鑰 (&P)",
+            "translation": "&Offentlig nøgle:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "(unknown)",
             "message": "(unknown)",
-            "translation": "(未知)",
+            "translation": "(ukendt)",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Block untunneled traffic (kill-switch)",
             "message": "&Block untunneled traffic (kill-switch)",
-            "translation": "阻斷未經過隧道的流量（kill-switch） (&B)",
+            "translation": "&Blokér untunneled trafik (kill-switch)",
             "translatorComment": "Copied from source."
         },
         {
             "id": "When a configuration has exactly one peer, and that peer has an allowed IPs containing at least one of 0.0.0.0/0 or ::/0, then the tunnel service engages a firewall ruleset to block all traffic that is neither to nor from the tunnel interface or is to the wrong DNS server, with special exceptions for DHCP and NDP.",
             "message": "When a configuration has exactly one peer, and that peer has an allowed IPs containing at least one of 0.0.0.0/0 or ::/0, then the tunnel service engages a firewall ruleset to block all traffic that is neither to nor from the tunnel interface or is to the wrong DNS server, with special exceptions for DHCP and NDP.",
-            "translation": "只有一個節點且該節點允許位址包含 0.0.0.0/0 或 ::/0 時，使用防火牆攔截所有非通過隧道，或是目的地為錯誤 DNS 伺服器的流量。\n（DHCP 及 NDP 流量除外）",
+            "translation": "Når en konfiguration har præcis en peer, og denne peer har en tilladt IP'er indeholdende mindst en af 0,0.0. /0 eller ::/0, tunnelen anvender derefter en firewall-regelsæt til at blokere al trafik, der hverken er til eller fra tunnelgrænsefladen eller er til den forkerte DNS-server med særlige undtagelser for DHCP og NDP.",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Save",
             "message": "&Save",
-            "translation": "儲存 (&S)",
+            "translation": "&Gem",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Cancel",
             "message": "Cancel",
-            "translation": "取消",
+            "translation": "Annullér",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Configuration:",
             "message": "&Configuration:",
-            "translation": "設定 (&C)",
+            "translation": "&Konfiguration:",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Invalid name",
             "message": "Invalid name",
-            "translation": "無效的名稱",
+            "translation": "Ugyldigt navn",
             "translatorComment": "Copied from source."
         },
         {
             "id": "A name is required.",
             "message": "A name is required.",
-            "translation": "必須填寫名稱。",
+            "translation": "Et navn er påkrævet.",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Tunnel name ‘{NewName}’ is invalid.",
             "message": "Tunnel name ‘{NewName}’ is invalid.",
-            "translation": "無效的隧道名稱「{NewName}」。",
+            "translation": "Tunnel navn '{NewName}' er ugyldig.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -919,19 +934,19 @@
         {
             "id": "Unable to list existing tunnels",
             "message": "Unable to list existing tunnels",
-            "translation": "無法列出現有隧道",
+            "translation": "Kan ikke liste eksisterende tunneller",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Tunnel already exists",
             "message": "Tunnel already exists",
-            "translation": "隧道已存在",
+            "translation": "Tunnelen eksisterer allerede",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Another tunnel already exists with the name ‘{NewName}’.",
             "message": "Another tunnel already exists with the name ‘{NewName}’.",
-            "translation": "已有同名隧道「{NewName}」。",
+            "translation": "En anden tunnel findes allerede med navnet '{NewName}'.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -947,19 +962,19 @@
         {
             "id": "Unable to create new configuration",
             "message": "Unable to create new configuration",
-            "translation": "無法建立新的隧道設定",
+            "translation": "Kan ikke oprette ny konfiguration",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Writing file failed",
             "message": "Writing file failed",
-            "translation": "檔案寫入失敗",
+            "translation": "Fejl ved skrivning af fil",
             "translatorComment": "Copied from source."
         },
         {
             "id": "File ‘{FilePath}’ already exists.\n\nDo you want to overwrite it?",
             "message": "File ‘{FilePath}’ already exists.\n\nDo you want to overwrite it?",
-            "translation": "檔案已存在： {FilePath}\n\n您確定要覆蓋嗎？",
+            "translation": "Filen '{FilePath}' findes allerede.\n\nVil du overskrive den?",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -975,97 +990,97 @@
         {
             "id": "Active",
             "message": "Active",
-            "translation": "已連線",
+            "translation": "Aktiv",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Activating",
             "message": "Activating",
-            "translation": "正在連線…",
+            "translation": "Aktiverer",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Inactive",
             "message": "Inactive",
-            "translation": "已中斷連線",
+            "translation": "Inaktiv",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Deactivating",
             "message": "Deactivating",
-            "translation": "正在中斷…",
+            "translation": "Deaktiverer",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Unknown state",
             "message": "Unknown state",
-            "translation": "未知",
+            "translation": "Ukendt tilstand",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Log",
             "message": "Log",
-            "translation": "日誌",
+            "translation": "Log",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Copy",
             "message": "&Copy",
-            "translation": "複製 (&C)",
+            "translation": "&Kopiér",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Select &all",
             "message": "Select &all",
-            "translation": "全選 (&A)",
+            "translation": "Vælg &alle",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Save to file…",
             "message": "&Save to file…",
-            "translation": "匯出… (&S)",
+            "translation": "&Gem til fil…",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Time",
             "message": "Time",
-            "translation": "時間",
+            "translation": "Tid",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Log message",
             "message": "Log message",
-            "translation": "日誌訊息",
+            "translation": "Log besked",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
             "message": "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
-            "translation": "純文字 (*.txt)|*.txt|所有檔案 (*.*)|*.*",
+            "translation": "Tekstfiler (*.txt)- *.txt- Alle Filer (*.*)- *.*",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Export log to file",
             "message": "Export log to file",
-            "translation": "匯出日誌…",
+            "translation": "Eksportér log til fil",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&About WireGuard…",
             "message": "&About WireGuard…",
-            "translation": "關於 WireGuard (&A)",
+            "translation": "&Om WireGuard…",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Tunnel Error",
             "message": "Tunnel Error",
-            "translation": "隧道錯誤",
+            "translation": "Tunnel fejl",
             "translatorComment": "Copied from source."
         },
         {
             "id": "{ErrMsg}\n\nPlease consult the log for more information.",
             "message": "{ErrMsg}\n\nPlease consult the log for more information.",
-            "translation": "{ErrMsg}\n\n如需更多資訊，請查看日誌。",
+            "translation": "{ErrMsg}\n\nSe loggen for mere information.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1081,7 +1096,7 @@
         {
             "id": "{Title} (out of date)",
             "message": "{Title} (out of date)",
-            "translation": "{Title}（已過時）",
+            "translation": "{Title} (forældet)",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1097,13 +1112,13 @@
         {
             "id": "WireGuard Detection Error",
             "message": "WireGuard Detection Error",
-            "translation": "偵測 WireGuard 錯誤",
+            "translation": "Fejl I WireGuard Detektering",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Unable to wait for WireGuard window to appear: {Err}",
             "message": "Unable to wait for WireGuard window to appear: {Err}",
-            "translation": "無法等待 WireGuard 視窗開啓： {Err}",
+            "translation": "Kunne ikke vente på WireGuard vinduet vises: {Err}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1119,55 +1134,55 @@
         {
             "id": "WireGuard: Deactivated",
             "message": "WireGuard: Deactivated",
-            "translation": "WireGuard - 未連線",
+            "translation": "WireGuard: Deaktiveret",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Status: Unknown",
             "message": "Status: Unknown",
-            "translation": "[狀態] 未知",
+            "translation": "Status: Ukendt",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Addresses: None",
             "message": "Addresses: None",
-            "translation": "[位址] 無",
+            "translation": "Adresser: Ingen",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Manage tunnels…",
             "message": "&Manage tunnels…",
-            "translation": "管理隧道 (&M)",
+            "translation": "&Håndtér tunneler…",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Import tunnel(s) from file…",
             "message": "&Import tunnel(s) from file…",
-            "translation": "從檔案匯入… (&I)",
+            "translation": "&Importér tunnel(er) fra fil…",
             "translatorComment": "Copied from source."
         },
         {
             "id": "E&xit",
             "message": "E&xit",
-            "translation": "離開 (&X)",
+            "translation": "&Afslut",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Tunnels",
             "message": "&Tunnels",
-            "translation": "隧道(&T)",
+            "translation": "&Tunneler",
             "translatorComment": "Copied from source."
         },
         {
             "id": "WireGuard Activated",
             "message": "WireGuard Activated",
-            "translation": "WireGuard 已連線",
+            "translation": "WireGuard aktiveret",
             "translatorComment": "Copied from source."
         },
         {
             "id": "The {Name} tunnel has been activated.",
             "message": "The {Name} tunnel has been activated.",
-            "translation": "已連線至隧道 - {Name}",
+            "translation": "{Name} tunnelen er blevet aktiveret.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1183,13 +1198,13 @@
         {
             "id": "WireGuard Deactivated",
             "message": "WireGuard Deactivated",
-            "translation": "WireGuard 已中斷連線",
+            "translation": "WireGuard deaktiveret",
             "translatorComment": "Copied from source."
         },
         {
             "id": "The {Name} tunnel has been deactivated.",
             "message": "The {Name} tunnel has been deactivated.",
-            "translation": "已中斷與隧道的連線 - {Name}",
+            "translation": "{Name} tunnelen er blevet deaktiveret.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1205,13 +1220,13 @@
         {
             "id": "WireGuard Tunnel Error",
             "message": "WireGuard Tunnel Error",
-            "translation": "WireGuard 隧道錯誤",
+            "translation": "WireGuard tunnel fejl",
             "translatorComment": "Copied from source."
         },
         {
             "id": "WireGuard: {TextForStateglobalState_true}",
             "message": "WireGuard: {TextForStateglobalState_true}",
-            "translation": "WireGuard - {TextForStateglobalState_true}",
+            "translation": "WireGuard: {TextForStateglobalState_true}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1227,7 +1242,7 @@
         {
             "id": "Status: {StateText}",
             "message": "Status: {StateText}",
-            "translation": "[狀態] {StateText}",
+            "translation": "Status: {StateText}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1243,7 +1258,7 @@
         {
             "id": "Addresses: {EnumerationSeparator}",
             "message": "Addresses: {EnumerationSeparator}",
-            "translation": "位址: {EnumerationSeparator}",
+            "translation": "Adresser: {EnumerationSeparator}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1259,91 +1274,91 @@
         {
             "id": "An Update is Available!",
             "message": "An Update is Available!",
-            "translation": "更新",
+            "translation": "En opdatering er tilgængelig!",
             "translatorComment": "Copied from source."
         },
         {
             "id": "WireGuard Update Available",
             "message": "WireGuard Update Available",
-            "translation": "WireGuard 更新",
+            "translation": "WireGuard opdatering tilgængelig",
             "translatorComment": "Copied from source."
         },
         {
             "id": "An update to WireGuard is now available. You are advised to update as soon as possible.",
             "message": "An update to WireGuard is now available. You are advised to update as soon as possible.",
-            "translation": "更新的 WireGuard 已經為您準備好了。\n強烈建議您立即更新 WireGuard。",
+            "translation": "En opdatering til WireGuard er nu tilgængelig. Det anbefales at opdatere med det samme.",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Tunnels",
             "message": "Tunnels",
-            "translation": "隧道",
+            "translation": "Tunneler",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Edit",
             "message": "&Edit",
-            "translation": "編輯 (&E)",
+            "translation": "&Redigér",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Add &empty tunnel…",
             "message": "Add &empty tunnel…",
-            "translation": "新增隧道精靈 (&E)",
+            "translation": "Tilføj &tom tunnel…",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Add Tunnel",
             "message": "Add Tunnel",
-            "translation": "新增隧道",
+            "translation": "Tilføj tunnel",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Remove selected tunnel(s)",
             "message": "Remove selected tunnel(s)",
-            "translation": "刪除選取隧道",
+            "translation": "Fjern valgte tunnel(er)",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Export all tunnels to zip",
             "message": "Export all tunnels to zip",
-            "translation": "匯出所有隧道（ZIP 格式）",
+            "translation": "Eksportér alle tunneler til zip-fil",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Toggle",
             "message": "&Toggle",
-            "translation": "切換連線狀態 (&T)",
+            "translation": "&Skift",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Export all tunnels to &zip…",
             "message": "Export all tunnels to &zip…",
-            "translation": "匯出所有隧道至 &ZIP 壓縮檔",
+            "translation": "Eksportér alle tunneler til &zip-fil…",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Edit &selected tunnel…",
             "message": "Edit &selected tunnel…",
-            "translation": "編輯選取隧道 (&S)",
+            "translation": "Redigér &valgte tunnel…",
             "translatorComment": "Copied from source."
         },
         {
             "id": "&Remove selected tunnel(s)",
             "message": "&Remove selected tunnel(s)",
-            "translation": "刪除已選取隧道 (&R)",
+            "translation": "&Fjern valgte tunnel(er)",
             "translatorComment": "Copied from source."
         },
         {
             "id": "no configuration files were found",
             "message": "no configuration files were found",
-            "translation": "找不到設定檔",
+            "translation": "ingen konfigurationsfiler blev fundet",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Could not import selected configuration: {LastErr}",
             "message": "Could not import selected configuration: {LastErr}",
-            "translation": "無法匯入設定： {LastErr}",
+            "translation": "Kunne ikke importere valgte konfiguration: {LastErr}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1359,7 +1374,7 @@
         {
             "id": "Could not enumerate existing tunnels: {LastErr}",
             "message": "Could not enumerate existing tunnels: {LastErr}",
-            "translation": "無法列出隧道： {LastErr}",
+            "translation": "Kunne ikke fremvise eksisterende tunneller: {LastErr}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1375,7 +1390,7 @@
         {
             "id": "Another tunnel already exists with the name ‘{Name}’",
             "message": "Another tunnel already exists with the name ‘{Name}’",
-            "translation": "已有另一個同名的隧道「{Name}」",
+            "translation": "En anden tunnel findes allerede med navnet '{Name}'",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1391,7 +1406,7 @@
         {
             "id": "Unable to import configuration: {LastErr}",
             "message": "Unable to import configuration: {LastErr}",
-            "translation": "無法匯入設定： {LastErr}",
+            "translation": "Kan ikke importere konfiguration: {LastErr}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1407,7 +1422,7 @@
         {
             "id": "Imported tunnels",
             "message": "Imported tunnels",
-            "translation": "已匯入隧道",
+            "translation": "Importeret tunneler",
             "translatorComment": "Copied from source."
         },
         {
@@ -1418,8 +1433,11 @@
                     "feature": "plural",
                     "arg": "M",
                     "cases": {
+                        "one": {
+                            "msg": "Importeret {M} tunnel"
+                        },
                         "other": {
-                            "msg": "已匯入 {M} 個隧道"
+                            "msg": "Importeret {M} tunneler"
                         }
                     }
                 }
@@ -1443,8 +1461,11 @@
                     "feature": "plural",
                     "arg": "N",
                     "cases": {
+                        "one": {
+                            "msg": "Importeret {M} ud af {N} tunnel"
+                        },
                         "other": {
-                            "msg": "已匯入 {M} 個隧道（共 {N} 個）"
+                            "msg": "Importeret {M} ud af {N} tunneler"
                         }
                     }
                 }
@@ -1471,7 +1492,7 @@
         {
             "id": "Unable to create tunnel",
             "message": "Unable to create tunnel",
-            "translation": "無法建立隧道",
+            "translation": "Ikke i stand til at oprette tunnel",
             "translatorComment": "Copied from source."
         },
         {
@@ -1482,8 +1503,11 @@
                     "feature": "plural",
                     "arg": "TunnelCount",
                     "cases": {
+                        "one": {
+                            "msg": "Slet {TunnelCount} tunnel"
+                        },
                         "other": {
-                            "msg": "刪除 {TunnelCount} 個隧道"
+                            "msg": "Slet {TunnelCount} tunneler"
                         }
                     }
                 }
@@ -1507,8 +1531,11 @@
                     "feature": "plural",
                     "arg": "TunnelCount",
                     "cases": {
+                        "one": {
+                            "msg": "Er du sikker på, at du vil slette {TunnelCount} tunnel?"
+                        },
                         "other": {
-                            "msg": "您確定要刪除 {TunnelCount} 個隧道嗎？"
+                            "msg": "Er du sikker på du ønsker at slette {TunnelCount} tunneler?"
                         }
                     }
                 }
@@ -1527,7 +1554,7 @@
         {
             "id": "Delete tunnel ‘{TunnelName}’",
             "message": "Delete tunnel ‘{TunnelName}’",
-            "translation": "刪除隧道 - {TunnelName}",
+            "translation": "Slet tunnel '{TunnelName}'",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1543,7 +1570,7 @@
         {
             "id": "Are you sure you would like to delete tunnel ‘{TunnelName}’?",
             "message": "Are you sure you would like to delete tunnel ‘{TunnelName}’?",
-            "translation": "您確定要刪除隧道「{TunnelName}」嗎？",
+            "translation": "Er du sikker på, at du vil slette tunnelen '{TunnelName}'?",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1559,7 +1586,7 @@
         {
             "id": "{Question} You cannot undo this action.",
             "message": "{Question} You cannot undo this action.",
-            "translation": "{Question}\n\n您將無法復原此操作。",
+            "translation": "{Question} Du kan ikke fortryde denne handling.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1575,13 +1602,13 @@
         {
             "id": "Unable to delete tunnel",
             "message": "Unable to delete tunnel",
-            "translation": "無法刪除隧道",
+            "translation": "Ikke i stand til at slette tunnel",
             "translatorComment": "Copied from source."
         },
         {
             "id": "A tunnel was unable to be removed: {Error}",
             "message": "A tunnel was unable to be removed: {Error}",
-            "translation": "無法刪除隧道： {Error}",
+            "translation": "En tunnel kunne ikke fjernes: {Error}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1597,7 +1624,7 @@
         {
             "id": "Unable to delete tunnels",
             "message": "Unable to delete tunnels",
-            "translation": "無法刪除隧道",
+            "translation": "Ikke i stand til at slette tunneler",
             "translatorComment": "Copied from source."
         },
         {
@@ -1608,8 +1635,11 @@
                     "feature": "plural",
                     "arg": "Lenerrors",
                     "cases": {
+                        "one": {
+                            "msg": "{Lenerrors} tunnel kunne ikke fjernes."
+                        },
                         "other": {
-                            "msg": "無法刪除 {Lenerrors} 個隧道"
+                            "msg": "{Lenerrors} tunneller kunne ikke fjernes."
                         }
                     }
                 }
@@ -1628,31 +1658,31 @@
         {
             "id": "Configuration Files (*.zip, *.conf)|*.zip;*.conf|All Files (*.*)|*.*",
             "message": "Configuration Files (*.zip, *.conf)|*.zip;*.conf|All Files (*.*)|*.*",
-            "translation": "隧道設定檔 (*.zip, *.conf)|*.zip;*.conf|所有檔案 (*.*)|*.*",
+            "translation": "Konfigurationsfiler (*.zip, *.conf)- *.zip;*.conf- Alle Filer (*.*)- *.*",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Import tunnel(s) from file",
             "message": "Import tunnel(s) from file",
-            "translation": "從檔案中匯入隧道…",
+            "translation": "Importér tunnel(er) fra fil",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Configuration ZIP Files (*.zip)|*.zip",
             "message": "Configuration ZIP Files (*.zip)|*.zip",
-            "translation": "隧道設定檔 (*.zip)|*.zip",
+            "translation": "Konfigurationszip-filer (*.zip)- *.zip",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Export tunnels to zip",
             "message": "Export tunnels to zip",
-            "translation": "匯出隧道設定至…",
+            "translation": "Eksportér tunneler til zip-fil",
             "translatorComment": "Copied from source."
         },
         {
             "id": "{Title} (unsigned build, no updates)",
             "message": "{Title} (unsigned build, no updates)",
-            "translation": "{Title}（未簽署發行版本，無法自動更新）",
+            "translation": "{Title} (usigneret build, ingen opdateringer)",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1668,13 +1698,13 @@
         {
             "id": "Error Exiting WireGuard",
             "message": "Error Exiting WireGuard",
-            "translation": "離開 WireGuard 失敗",
+            "translation": "Fejl ved afslutning af WireGuard",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Unable to exit service due to: {Err}. You may want to stop WireGuard from the service manager.",
             "message": "Unable to exit service due to: {Err}. You may want to stop WireGuard from the service manager.",
-            "translation": "無法結束服務： {Err}。\n您可能需要手動從服務管理中結束 WireGuard 服務。",
+            "translation": "Kan ikke afslutte tjenesten på grund af: {Err}. Du kan stoppe WireGuard fra serviceadministratoren.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1690,31 +1720,31 @@
         {
             "id": "An update to WireGuard is available. It is highly advisable to update without delay.",
             "message": "An update to WireGuard is available. It is highly advisable to update without delay.",
-            "translation": "更新的 WireGuard 已經為您準備好了。\n強烈建議您立即進行更新。",
+            "translation": "En opdatering til WireGuard er tilgængelig. Det anbefales at opdatere med det samme.",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Status: Waiting for user",
             "message": "Status: Waiting for user",
-            "translation": "狀態：等待使用者",
+            "translation": "Status: Venter på bruger",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Update Now",
             "message": "Update Now",
-            "translation": "立即更新",
+            "translation": "Opdatér nu",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Status: Waiting for updater service",
             "message": "Status: Waiting for updater service",
-            "translation": "狀態：等待更新服務",
+            "translation": "Status: Venter på opdateringstjeneste",
             "translatorComment": "Copied from source."
         },
         {
             "id": "Error: {Err}. Please try again.",
             "message": "Error: {Err}. Please try again.",
-            "translation": "錯誤： {Err}。請稍後再試。",
+            "translation": "Fejl: {Err}. Prøv venligst igen.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1730,13 +1760,13 @@
         {
             "id": "Status: Complete!",
             "message": "Status: Complete!",
-            "translation": "狀態：已完成！",
+            "translation": "Status: Færdig!",
             "translatorComment": "Copied from source."
         },
         {
             "id": "http2: Framer {F}: failed to decode just-written frame",
             "message": "http2: Framer {F}: failed to decode just-written frame",
-            "translation": "http2: Framer {F}: failed to decode just-written frame",
+            "translation": "http2: Framer {F}: kunne ikke afkode just-written frame",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1752,7 +1782,7 @@
         {
             "id": "http2: Framer {F}: wrote {Http2summarizeFramefr}",
             "message": "http2: Framer {F}: wrote {Http2summarizeFramefr}",
-            "translation": "http2: Framer {F}: wrote {Http2summarizeFramefr}",
+            "translation": "http2: Framer {F}: skrev {Http2summarizeFramefr}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1776,7 +1806,7 @@
         {
             "id": "http2: Framer {Fr}: read {Http2summarizeFramef}",
             "message": "http2: Framer {Fr}: read {Http2summarizeFramef}",
-            "translation": "http2: Framer {Fr}: read {Http2summarizeFramef}",
+            "translation": "http2: Framer {Fr}: læste {Http2summarizeFramef}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1800,7 +1830,7 @@
         {
             "id": "http2: decoded hpack field {HeaderField}",
             "message": "http2: decoded hpack field {HeaderField}",
-            "translation": "http2: decoded hpack field {HeaderField}",
+            "translation": "http2: afkodet hpack felt {HeaderField}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {

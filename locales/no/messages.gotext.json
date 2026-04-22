@@ -1,0 +1,11 @@
+{
+    "language": "no",
+    "messages": [
+        {
+            "id": "Error",
+            "message": "Error",
+            "translation": "Feil",
+            "translatorComment": "Copied from source."
+        }
+    ]
+}

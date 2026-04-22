@@ -42,7 +42,7 @@ func InstallManager() error {
 	}
 	path, err := os.Executable()
 	if err != nil {
-		return nil
+		return err
 	}
 
 	// TODO: Do we want to bail if executable isn't being run from the right location?
@@ -70,12 +70,15 @@ func InstallManager() error {
 		if err != nil {
 			return err
 		}
+
 		for {
 			service, err = m.OpenService(serviceName)
-			if err != nil {
+			if err != nil && err != windows.ERROR_SERVICE_MARKED_FOR_DELETE {
 				break
 			}
-			service.Close()
+			if err == nil {
+				service.Close()
+			}
 			time.Sleep(time.Second / 3)
 		}
 	}
@@ -121,7 +124,7 @@ func InstallTunnel(configPath string) error {
 	}
 	path, err := os.Executable()
 	if err != nil {
-		return nil
+		return err
 	}
 
 	name, err := conf.NameFromPath(configPath)
@@ -154,7 +157,9 @@ func InstallTunnel(configPath string) error {
 			if err != nil && err != windows.ERROR_SERVICE_MARKED_FOR_DELETE {
 				break
 			}
-			service.Close()
+			if err == nil {
+				service.Close()
+			}
 			time.Sleep(time.Second / 3)
 		}
 	}
