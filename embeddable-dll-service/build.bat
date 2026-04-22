@@ -8,9 +8,14 @@ set PATH=%BUILDDIR%..\.deps\bin;%PATH%
 set PATHEXT=.exe
 cd /d %BUILDDIR% || exit /b 1
 
-if exist ..\.deps\prepared goto :build
+if exist ..\.deps\prepared goto :getversion
 :installdeps
-	call ..\build.bat || goto :error
+	call .\installdependencies.bat || goto :error
+	
+:getversion
+	for /f "tokens=3" %%a in ('findstr /r "Number.*=.*[0-9.]*" ..\version\version.go') do set WIREGUARD_VERSION=%%a
+	set WIREGUARD_VERSION=%WIREGUARD_VERSION:"=%
+	for /f "tokens=1-4" %%a in ("%WIREGUARD_VERSION:.= % 0 0 0") do set WIREGUARD_VERSION_ARRAY=%%a,%%b,%%c,%%d
 
 :build
 	set GOOS=windows
@@ -38,8 +43,11 @@ if exist ..\.deps\prepared goto :build
 	set CC=%~2-w64-mingw32-gcc
 	set GOARCH=%~3
 	mkdir %1 >NUL 2>&1
+	echo [+] Assembling resources %1
+	%~2-w64-mingw32-windres -I "..\.deps\wireguard-nt\bin\%~1" -DWIREGUARD_VERSION_ARRAY=%WIREGUARD_VERSION_ARRAY% -DWIREGUARD_VERSION_STR=%WIREGUARD_VERSION% -i resources.rc -o "resources_%~3.syso" -O coff -c 65001 || exit /b %errorlevel%
 	echo [+] Building library %1
 	go build -buildmode c-shared -ldflags="-w -s" -trimpath -v -o "%~1/tunnel.dll" || exit /b 1
+	echo [+] Building library %1 completed
 	del "%~1\tunnel.h"
 	goto :eof
 

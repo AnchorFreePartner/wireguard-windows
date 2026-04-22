@@ -1,0 +1,15 @@
+name: Checkov Scan
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  checkov:
+    uses: AnchorFreePartner/secops-workflows/.github/workflows/reusable-checkov.yml@main
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
