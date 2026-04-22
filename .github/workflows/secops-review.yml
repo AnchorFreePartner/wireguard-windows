@@ -1,0 +1,20 @@
+name: Secops Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  firewall-review:
+    uses: AnchorFreePartner/secops-workflows/.github/workflows/reusable-firewall-review.yml@main
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+
+  action-review:
+    uses: AnchorFreePartner/secops-workflows/.github/workflows/reusable-action-pinning-review.yml@main
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
