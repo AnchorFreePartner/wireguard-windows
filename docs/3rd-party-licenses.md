@@ -2,7 +2,7 @@
 
 <!--
   This submodule contains go and other dependencies for wireguard tunnel.dll third party component.
-  NuGet package scan is not applicable � all dependencies are tracked in the Component Licenses table below.
+  NuGet package scan is not applicable — all dependencies are tracked in the Component Licenses table below.
 -->
 
 ## Component Licenses
