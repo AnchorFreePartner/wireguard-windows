@@ -13,6 +13,5 @@
  | golang.org/x/crypto                  | statically linked in tunnel.dll | v0.50.0  | BSD-3-Clause | https://pkg.go.dev/golang.org/x/crypto?tab=licenses                  | licenses/GoPackages.txt           |
  | golang.org/x/sys                     | statically linked in tunnel.dll | v0.43.0  | BSD-3-Clause | https://pkg.go.dev/golang.org/x/sys?tab=licenses                     | licenses/GoPackages.txt           |
  | golang.org/x/text                    | statically linked in tunnel.dll | v0.36.0  | BSD-3-Clause | https://pkg.go.dev/golang.org/x/text?tab=licenses                    | licenses/GoPackages.txt           |
- | golang.org/x/sync                    | statically linked in tunnel.dll | v0.20.0  | BSD-3-Clause | https://pkg.go.dev/golang.org/x/sync?tab=licenses                    | licenses/GoPackages.txt           |
  | golang.org/x/pkgsite/internal/stdlib | statically linked in tunnel.dll | go1.26.2 | BSD-3-Clause | https://pkg.go.dev/golang.org/x/pkgsite/internal/stdlib?tab=licenses | licenses/GoPackages.txt           |
  | git.zx2c4.com/wireguard-windows      | statically linked in tunnel.dll | v1.0.1   | MIT          | https://github.com/WireGuard/wireguard-windows/blob/v1.0.1/COPYING   | licenses/WireGuardWindows.txt     |
